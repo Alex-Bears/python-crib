@@ -56,7 +56,7 @@ $ python -c "import bcrypt; print(bcrypt.hashpw('password'.encode('utf-8'), bcry
  - [Виртуальное окружение](https://python-scripts.com/virtualenv)
  - [Описание стандартного модуля VENV](https://docs.python.org/3/library/venv.html#module-venv)
  - [Описание модуля virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/install.html) 
- - https://habr.com/ru/post/157287/
+ - https://habr.com/ru/post/157287/  
 
 ```bash
 ### Работа
