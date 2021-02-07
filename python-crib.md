@@ -27,7 +27,7 @@ $ python -c "import bcrypt; print(bcrypt.hashpw('password'.encode('utf-8'), bcry
 
 ```
 
-
+ 
 ## Установка пакетов
 
  - [Работа с менеджером пакетов PIP](https://pythonchik.ru/okruzhenie-i-pakety/pip--menedzher-python-paketov)
