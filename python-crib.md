@@ -36,6 +36,7 @@ $ python -c "import bcrypt; print(bcrypt.hashpw('password'.encode('utf-8'), bcry
  ```bash
  pip --version # Проверка установки pip
  pip install package-name # Установка пакета (но лучше как ниже)
+ pip -q install package-name # инсталяция пакета в глобальную директорию
  # Зачем использовать python -m pip: https://habr.com/ru/company/otus/blog/475392/
  python3.8 -m pip package-name # Установка пакета для определенного интерпретатора
  python -m pip install --upgrade pip # Обновление pip
