@@ -781,13 +781,269 @@ python manage.py createsuperuser
 http://127.0.0.1:8000/admin/ # админка
 ```
 
+## Регистрация модели в админке
+
 ```python
-# Регистрация модели в админке 
 # в файле posts/admin.py
 from django.contrib import admin
 from .models import Post
 admin.site.register(Post)
 ```
+
+### Конфигурация модели
+
+```python
+"""
+Для настройки отображения модели в интерфейсе админки применяют класс  
+ModelAdmin. Он связывается с моделью и конфигурирует отображение данных этой 
+модели. В этом классе можно настроить параметры отображения. Полный список  
+параметров есть в документации.
+
+В файле posts/admin.py создайте класс PostAdmin, наследующийся от  admin.
+ModelAdmin, и зарегистрируйте его как источник конфигурации для модели Post
+"""
+
+from django.contrib import admin
+from .models import Post
+
+class PostAdmin(admin.ModelAdmin):
+    # перечисляем поля, которые должны отображаться в админке
+    list_display = ("text", "pub_date", "author") 
+    # "pk" для вывода ключа, ID записи
+    # list_display = ("pk", "text", "pub_date", "author") 
+    
+    # добавляем интерфейс для поиска по тексту постов
+    search_fields = ("text",) 
+    # добавляем возможность фильтрации по дате
+    list_filter = ("pub_date",) 
+    # это свойство сработает для всех колонок: где пусто - там будет эта строка
+    empty_value_display = "-пусто-"  
+# при регистрации модели Post источником конфигурации для неё назначаем класс 
+# PostAdmin
+admin.site.register(Post, PostAdmin)
+```
+Остальные поля для управления выводом модели в админке:
+https://docs.djangoproject.com/en/3.0/ref/contrib/admin/#django.contrib.admin.ModelAdmin
+
+## Проектирование структуры адресов
+
+ - Данные проекта хранятся в БД.
+ - Для взаимодействия с БД в коде создаются модели.
+ - Пользователь обращается к какой-то странице сайта, Django сверяет 
+   запрошенный адрес с шаблонами адресов в файле urls.py.
+ - Каждый шаблон адреса в urls.py связан с определённой функцией или классом, 
+   которые обрабатывают входящие данные. Такие функции (или классы) 
+   называются View 
+ - View обращается к моделям и через них получает необходимые данные из БД.  
+   Эти данные View передает в шаблоны (Template).
+ - Данные выводятся в шаблон и генерируется HTML-документ, который
+   возвращается пользователю.
+
+```python
+# Примеры: 
+urlpatterns = [
+# правила для сопоставления шаблонов URL и функций
+    path('', include("posts.urls"))
+    path('', views.index), 
+    path('user', views.account),
+    path('user/<int:user-id>', views.user_page),
+    path('user/login', views.login),
+    path('user/<str: user-name>', views.user_page_name),
+] 
+# Urls.py проекта: yatube/urls.py
+from django.contrib import admin
+from django.urls import include, path
+
+urlpatterns = [
+    # импорт правил из приложения posts
+    path("", include("posts.urls")),
+    # импорт правил из приложения admin
+    path("admin/", admin.site.urls),
+] 
+
+# Urls.py приложения posts/urls.py
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path("", views.index, name="index")
+]
+```
+
+Функция path() принимает такие параметры: path(route, view, name):
+ - route — шаблон веб-адреса (URL). Получив HTTP-запрос, Django идет по 
+   списку urlpatterns сверху вниз, пока не найдёт совпадение запрошенного адреса с 
+   route в одном из вызовов path(). Если нет ни одного совпадения, 
+   пользователю вернётся сообщение об ошибке 404: «Страница не найдена».
+ - view — это имя view-функции. Если Django найдёт совпадение с шаблоном, то 
+   перенаправит вызов в указанную view-функцию.
+ - name — имя для path(), к нему можно обратиться из кода, чтобы установить 
+   ссылку на страницу сайта.
+
+Дополнительные параметры функции path(), о которых можно прочесть в 
+[документации](https://docs.djangoproject.com/en/3.0/ref/urls/#django.urls.path)
+
+## View обработка
+
+В файл posts/views.py добавить views-функцию index
+```python
+from django.http import HttpResponse
+from .models import Post
+
+def index(request):
+    # одна строка вместо тысячи слов на SQL
+    latest = Post.objects.order_by('-pub_date')[:10]
+    # собираем тексты постов в один, разделяя новой строкой
+    output = []
+    for item in latest:
+        output.append(item.text)
+    return HttpResponse('\n'.join(output))
+
+Post.objects.all() # получить все записи модели Post
+Post.objects.get(id=1) 
+# получить запись модели Post, у которой значение 
+# поля id равно 1. Поскольку поле id — это первичный ключ, а Django 
+# автоматически создаёт у модели свойство pk, то альтернативная запись этого 
+# же запроса будет такой: Post.objects.get(pk=1).
+Post.objects.filter(pub_date__year=1854) 
+# запрос вернёт объекты, у которых 
+# значение года в поле pub_date равно 1854. Обратите внимание на синтаксис 
+# фильтрации: двойное нижнее подчёркивание между названиями поля и фильтра. 
+# Подробнее о функции filter() в документации:
+# https://docs.djangoproject.com/en/3.0/ref/models/querysets/#django.db.models.query.QuerySet.filter
+Post.objects.filter(text__startswith="Писать не хочется") # пример фильтра 
+# по текстовому полю, он вернёт записи, начинающиеся с указанной в фильтре 
+# строки.
+
+```
+
+## Шаблоны 
+
+### Рендеринг шаблона
+
+```python
+from django.shortcuts import render
+
+def my_index(request):
+    # какой-то код
+    title = 'Заголовок страницы'
+    body = 'Текст страницы'
+    # Сгенерированные во view-функции данные сохраняем в словарь
+    context = {'title': title, 'body': body}
+
+    # вызов функции render():
+    # первый параметр — это всегда request, объект запроса
+    # второй параметр - имя шаблона, в который будут "обёрнуты" данные
+    # третий параметр - словарь с переменными, которые передаются  в шаблон
+    return render(request, 'index.html', context) 
+```
+
+```html
+<h1>{{ title }}</h1>
+<p>{{ body }}</p> 
+```
+
+В словаре context можно передать в шаблон любые данные: строки, списки, словари,
+объекты классов — всё, что необходимо. Обратиться в шаблоне к элементу словаря, 
+свойству объекта или элементу списка можно через точечную нотацию:
+
+```html
+{{ var_dict.key }} — обращение к ключу словаря
+{{ var_instance.attribute }} — обращение к свойству или методу класса
+{{ var_list.0 }} — обращение к элементу списка 
+```
+
+### Теги
+
+[Документация](https://docs.djangoproject.com/en/2.2/ref/templates/builtins/#ref-templates-builtins-tags) 
+по тегам шаблонизатора
+
+Для более сложных конструкций, влияющих на логику исполнения кода, существуют 
+элементы разметки, теги. Это иное, чем HTML-теги, в коде они выделяются 
+конструкциями {% и %}. Теги шаблонизатора могут быть одиночные:
+
+```html
+{% include "footer.html" %} 
+```
+или парные, состоящие из открывающего и закрывающего тегов: 
+```html
+{% block %}
+  тело тега
+{% endblock %} 
+```
+
+```html
+{% if user.is_authenticated %}
+  Привет, {{ user.username }}.
+{% else %}
+  Будет здорово, если вы авторизуетесь!
+{% endif %}
+```
+
+Комментарии
+```html
+{% comment "Опциональный текст, комментарий к комментарию" %}
+  <p>Этот кусок шаблона временно отключен {{ create_date|date:"c" }}</p>
+  <p>Уходя, гасите свет.</p>
+{% endcomment %}
+
+{# Однострочный комментарий, пригодится для заметок **#}
+<!-- И это -- тоже комментарий -->
+```
+
+### Фильтры в HTML-шаблонах 
+
+[Документация](https://docs.djangoproject.com/en/3.0/ref/templates/builtins/#ref-templates-builtins-filters) 
+по фильтрам шаблонизатора
+
+Фильтры обрабатывают значения переменных или аргументов других тегов. В коде 
+фильтры присоединяются к имени переменной через символ |
+
+**length** - Вернёт длину строки или последовательности, переданной в переменной
+variable:
+```html
+{{ variable|length }} 
+```
+
+**safe** - Чтобы HTML-теги не вываливались на страницу, а выполняли своё 
+предназначение (форматировали и структурировали страницу) — в шаблоне необходимо
+применять фильтр safe
+```python
+# views.py
+...
+def poem(request):
+    text = ('Вчера Крокодил<br>улыбнулся так злобно,<br>Что мне до сих '
+            'пор<br>за него неудобно.<br><i>Рената Муха</i>'
+            )
+    context = {'poem': text}
+    render(request, 'poem.html', context) 
+```
+```html
+{# poem.html #}
+<h2>Стихотворение</h2>
+{{ poem|safe }} 
+```
+
+**linebreaksbr** - Он заменяет символы перевода строки \n на HTML-теги \<br>.
+
+**date** - работает только с объектами типа date и datetime: он форматирует дату
+[по маске](https://docs.djangoproject.com/en/2.2/ref/templates/builtins/#date). 
+За основу взят стандарт, принятый в языке программирования PHP. 
+```html
+{{ pub_date|date:"j.m.Y" }} {# выведет 2.02.2020 #} 
+{{ pub_date|date:"j F Y" }} {# выведет 2 февраля 2020 #}
+{{ pub_date|date:"d.m.y" }} {# выведет 02.02.20 #}
+{{ pub_date|date:"d M Y" }} {# выведет 02 фев 2020 #} 
+```
+
+Фильтры можно объединять в цепочку:
+
+```html
+{{ variable|title|truncatewords:4 }} 
+```
+
+
+
 
 
 # Шпаргалка SQL
