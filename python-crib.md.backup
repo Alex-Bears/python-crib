@@ -1,0 +1,2492 @@
+# Установка ПО
+
+Python 
+- [Дистрибутив](https://www.python.org/) 
+- [Python 3.8.7 32bit for Win7](https://www.python.org/ftp/python/3.8.7/python-3.8.7.exe)
+- [32 или 64](https://docs-python.ru/tutorial/ustanovka-python/vybiraem-razrjadnost-windows/)
+- [Using Python on Windows](https://docs.python.org/3/using/windows.html#using-on-windows)
+
+PyCharm
+- [Дистрибутив](https://www.jetbrains.com/ru-ru/pycharm/download/#section=windows) 
+- [Как установить и настроить](https://pythonchik.ru/osnovy/faq-po-rabote-s-pycharm)
+- Плагины:
+    * [Нейронная сеть для автокомплита](https://plugins.jetbrains.com/plugin/12798-tabnine-ai-autocomplete-javascript-c-python-ruby-rust-go-php--)
+    * [подсвечивание скобочек разными цветами](https://plugins.jetbrains.com/plugin/10080-rainbow-brackets)
+    * [меняет стить написание переменных](https://plugins.jetbrains.com/plugin/7160-camelcase)
+
+VSCode
+- [Дистрибутив](https://code.visualstudio.com/)
+
+ Git Bash 
+- [Дистрибутив](https://gitforwindows.org/)
+
+```bash 
+which python #  проверим расположения разных исполняемых файлов python
+pip -q install bcrypt # инсталяция пакета в глобальную директорию
+$ python -c "import bcrypt; print(bcrypt.hashpw('password'.encode('utf-8'), bcrypt.gensalt()))" # выполнение кода из коммандной строки
+
+```
+
+ 
+## Установка пакетов
+
+ - [Работа с менеджером пакетов PIP](https://pythonchik.ru/okruzhenie-i-pakety/pip--menedzher-python-paketov)
+ - [Еще статья](https://python-scripts.com/upgrade-pip-windows)
+
+ ```bash
+ pip --version # Проверка установки pip
+ pip install package-name # Установка пакета (но лучше как ниже)
+ pip install Django==2.2  # Установка пакета определенной версии
+ pip -q install package-name # инсталяция пакета в глобальную директорию
+ # Зачем использовать python -m pip: https://habr.com/ru/company/otus/blog/475392/
+ python3.8 -m pip package-name # Установка пакета для определенного интерпретатора
+ python -m pip install --upgrade pip # Обновление pip
+ pip show <имя_пакета> # Проверка куда ставятся пакеты
+
+ pip help	# Справка по командам
+ pip search package_name	#П оиск пакета
+ pip show package_name	#И нформация об пакете
+ pip install package_name	# Установка пакета(ов)
+ pip uninstall package_name	# Удаление пакета(ов)
+ pip list	# Список установленных пакетов
+ pip install -U	# Обновление пакета(ов)
+ --user # устанавливает пакет(ы) локально только для текущего пользователя.
+ ```
+
+Пример requirements.txt :
+```text
+flake8==3.8.4
+flake8-broken-line==0.3.0
+flake8-isort==4.0.0
+flake8-plugin-utils==1.3.1
+flake8-polyfill==1.0.2
+flake8-return==1.1.2
+pytest==5.3.2
+Django==2.2
+```
+
+```bash
+pip install -r requirements.txt # Установка пакетов из файла со списком
+pip freeze > requirements.txt # Сохранение установленных пакетов в список
+```
+ 
+
+
+## Виртуальное окружение 
+
+ - [Виртуальное окружение](https://python-scripts.com/virtualenv)
+ - [Описание стандартного модуля VENV](https://docs.python.org/3/library/venv.html#module-venv)
+ - [Описание модуля virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/install.html) 
+ - https://habr.com/ru/post/157287/  
+
+```bash
+# Перейти в папку проекта
+python -m venv myvenv
+# Python, запусти модуль (-m) venv, он установит виртуальное окружение.
+# Назови это виртуальное окружение "myvenv", чтобы его можно было вызвать по имени.
+# Имя можно задать любое, мы в примерах будем использовать "venv". 
+source venv/Scripts/activate # активировать окружение
+deactivate  # отключить окружение
+
+
+### 
+pip install virtualenvwrapper-win # пакет управления виртуальными средами
+mkvirtualenv <name_venv>  # Создание новой среды
+workon # вывести список всех окружений 
+workon <name_venv> # Активируем окружение 
+lsvirtualenv # List all of the enviornments stored in WORKON_HOME
+rmvirtualenv <name_venv> # Удалить окружение
+add2virtualenv <full or relative path> # If a virtualenv environment is active, appends <path> to virtualenv_path_extensions.pth inside the environment’s site-packages, which effectively adds <path> to the environment’s PYTHONPATH. If a virtualenv environment is not active, appends <path> to virtualenv_path_extensions.pth inside the default Python’s site-packages. If <path> doesn’t exist, it will be created. 
+deactivate # Выходим из окружения
+
+### Находясь в одном из окружений, можно ставить пакеты через Pip, как обычно и нет необходимости добавлять ключ --user:
+pip3 install markdown
+```
+
+> Для Windows можно указать в переменных среды WORKON_HOME для переопределения пути, где хранятся виртуальные окружения.
+> По умолчанию, используется путь %USERPROFILE%\Envs.
+
+> От нас не требуется определять переменные виртуальной среды WORKON_HOME и PROJECT_HOME. В virtualenvwrapper имеются 
+> установленные по умолчанию переменные для них, но вы можете перезаписать их, указав значения.
+
+## Линтеры
+
+**Flake8**:
+[Статья про линтер flake8 и его установку в IDE](https://habr.com/ru/company/dataart/blog/318776/)
+
+```bash
+# Проверка проекта в консоли 
+pip install flake8 # Устаовка flake8 
+flake8 my_project # Запустить для проверки ошибок в папке проекта
+
+# Дополнения для линтера Flake8 
+pep8-naming # проверяет имена классов, функций и переменных на соответствие PEP8;  
+flake8-broken-line # отслеживает применение устаревших переносов (через обратный слеш \);
+flake8-return # проверяет значения, возвращаемые функциями;
+flake8-isort # проверяет правильность порядка импортов.
+
+# Контроль линтером в момент коммита 
+flake8 --install-hook git # Установить хук для Git
+git config --bool flake8.strict true И настроить сам гит, чтобы учитывать правила Flake8
+```
+
+# Шпаргалка Python
+
+## Простые объекты
+
+### Числа
+
+```py
+None # не определена, не имеет никакого значения
+
+### элементарные операции + - * / идентичны
+x = a//b # целое от деления
+x = a%b  # остаток от деления
+x = a**b # а в степени b 
+1e+16 # 1*10 в 16 степени
+100 ** 0.5 # заменяет возведение в степень
+round(23.456, 2) # 23.46 Округление 
+
+### булевые операции. порядок выполнения: 
+not # смена значения
+and # булево умножение
+or  # булево сложение
+== <= >= != # равно, меньше+равно, больше+равно, не равно
+a > b > c # Тройное сравнение  b=5; 3 < b < 7 == True
+
+### системы счисления
+x = 0b11101010      # в десятичной
+y = 0o0732          # в восьмиричной
+z = 0xFA0B          # в шестнадцатиричной
+a = int('Z56RS', base=36)   # Создание числа в 36-ричной системе
+print(x,y,z,a)              # print выведет все числа в десятичной системе
+bin(x), oct(x), hex(x)      # Выведет строку-представление числа x в 2/8/16-ричной системе соответственно
+
+### алгоритм перевода в любую систему счисления (число получается перевернутое)
+base = 7            # база системыв счисления
+x = int(input())    # вводим число
+while x > 0:
+    digit = x % base        # получаем последнюю цифру
+    print(digit, end = '')  # выводим цифру, без перевода каретки
+    x //= base              # отрезаем последнюю цифру
+```
+
+### Строки 
+
+```python
+
+### Методы строк 
+'sdf  sdf'.split() # разбить строку по пробелам 
+'sdf.  sdf'.split('. ') # разделить строку по разделителю. получить список
+'.sdf  sdf.'.strip('.') # Убирает лишние символы в начале и в конце  
+', '.join(iterator) # Сборка строки из значений любой коллекции через запятую 
+'sdfdf "sd" sad' # если нужно вывести кавычки в тексте они должны отличатся от обрамляющих
+'er '*3 = 'er er er' # Умножение строки
+'АБВ' < 'АБЯ' == False # Сравнение строк происходит посимвольно по коду символа Unicode
+'привет'.encode() # decode(<кодировка>) Строку из UTF8 в Unicode 
+b'\xd0\xdf\xd1\x80' # строка байт.  b'\xd0\xdf\xd1\x80'.decode('utf8') можно преобразовывать 
+len("sdg dgf") # длина строки 
+'Тойота RAV4'.find('а') # ==5 # Поиск подстроки в строке
+'Тойота RAV4'.rfind('а') # ==5 # С конца строки Поиск подстроки в строке 
+'Тойота RAV4'.replace('а', 'б') # замена всех значений в строке
+'Тойота RAV4'.upper() # 'ТОЙОТА RAV4' # к верхнему регистру
+'Тойота RAV4'.lower() # 'тойота rav4' # к нижнему регистру
+'Тойота RAV'.isalpha() # Все ли символы буквы? 
+'12345'.isdigit() # Все ли символы цифры?
+'Тойота RAV4'.isalnum() # В строке только цифры и буквы? 
+
+### Срезы 
+'Привет'[1] # 'p' - второй символа  
+'Привет'[-2] # 'е' - Второй с конца
+'Привет'[2:4] # 'ив' - С третьего по пятый
+'Привет'[2:-1] # 'иве' - с третьего по предпоследний
+'Привет'[-3:-1] # 'ве' - с предпоследнего по третий с конца
+'Привет'[:4] # 'Прив' - первые четыре  
+'Привет'[4:] # 'ет' - С пятого 
+'Привет'[::2] # 'Пие' - Брать каждый втоой символ
+'Привет'[::-1] # 'тевирП' - Развернуть строку. Брать по одному с конца  
+
+### f-строки
+print(f'На улице сейчас {weather}.') 
+
+
+```
+
+### Переменные
+
+```py
+x = y = z = 100 # Множественная инициализация. Все значения равны 100 
+x, y, z = 100, 150, 102 # Присвоение сразу трем значениям
+type(<переменная>) # определить тип переменной
+isinstance(x, int) # Проверка на тип значения int (str, float)
+id(x) # идентификатор места хранения переменных. если одинаково значит переменные одни и те же
+```
+
+### Преобразования
+
+ - Между системами счисления - схема Горнера
+```py
+str() # к строке
+int() # к целому
+float() # к дробному числу
+x, y = map(int, input.split()) # map - применяет функцию {1} к каждому значению {2} 
+
+```
+
+### Списки list
+```py
+list = [2, 4, 6, 8, 10, 12, 14, 16, 18]
+len(list) == 9 # длина списка
+list[<c>:<по>:<чередуя>] # срез списка. начало с 0. с конца с -1
+list.append('sdf') # добавить значение в конец списка
+# индексы словаря:
+  0         1          2        3
+['Ночь', 'Улица', 'Фонарь', 'Аптека']
+  -4       -3         -2       -1
+list[-1] # получить последний элемент  
+list = [x for x in list if x.strip()!=''] # Фильтр пустых строк в списке строк.
+
+### Методы списков
+L = [1,2,3,4,5,6]
+Срезы аналогичны строкам. (см. Строки)
+Сравнение списков аналогично строкам (см. Строки)
+[1, 2] * 3 == [1, 2, 1, 2, 1, 2] # Поверхностная копия, ссылаются на первые два элемнта 
+5 in [1, 77, 5] == True # Проверка на вхождение элемента
+L[0] = "ty" # Заменить первый элемент на "ty"
+
+L.append('123')  # Добавить элемент в список
+L.extend([234, 'ewe']) # Расширить список на два указанных элемента, добавить в конец
+L + [5, 5, 7] # Расширить список на три указанных элемента
+L.insert(2, 'WWW') # Вставка значения на третье место
+del L[3] # Удаляет значение из списка по 
+L.remove('WWW') # L.remove(4) Удаляет значение из списка по значению или по 
+индексу  
+reversed(list) # развернуть список с конца 
+[5, 5, 7].count(5) == 2 # подсчет количества конкретных значений в списке
+min(L) max(L) # получить минимальные и максимальное значения из списка list
+L.sort() # сортировка массива 
+
+
+
+```
+
+### Словари dict
+```py
+dict = { 'key': 'value'} 
+dict['key'] = 'dict' 
+# не может быть двух одинаковых ключей
+dict.keys()  # список ключей
+dict.value() # список значений
+", ".join(dict.values()) # Все значения через запятую
+### Расширение словоря
+dict['голова'] = 'head' # Добавили новую пару ключ : значение
+for track, music_band in favorite_songs.items(): # Обход всех ключей и значений словаря
+
+```
+
+### Кортежи tuple 
+
+```py
+Не изменяемые объекты
+Нельзя добавлять напрямую
+Нельзя удалять 
+Можно складывать (3, 4) + ("rf", "go") = (3, 4, "rf", "go")
+```
+
+### Множества (сеты) set
+
+```py
+# не упорядочен
+# удобно объединять 
+bands = ['Пикник', 'Ария', 'Блестящие', 'Блестящие']
+unique_band_names = set(bands) # содержит уникальные группы
+s = set('сервер')
+# {'в', 'е', 'с', 'р'} выведет только уникальные буквы
+s.add('н') # добавить элемент
+set1.union(set2) # сложение множеств. объединить два множества без повторений
+set1.difference(set2) # вычитание множеств. возвращает новое множество, которое содержит только те элементы, которые присутствуют в set1, но отcутствуют в set2
+set1.intersection(set2) # пересечение двух множеств, то есть элементы, которые есть в обоих 
+
+```
+
+### Условия 
+
+```py
+if beaufort == 0: 
+elif:
+else:
+```
+
+### Циклы
+
+```py
+### for
+for iterator not in list: # перебор значений коллекций: списков, словарей, сетов
+range(a, b) # генератор чисел для итерации с a до b-1. Запомнить принцип легко: если на месте a стоит ноль, range(0, N) вернёт ровно N значений
+reversed(range(1, 13)) # Обратный отсчет с 12 до 1 
+reversed(list) # развернуть список с конца
+for i in range(-1, 10): # Перебрать все числа в диапазоне от -1 до 9
+    conteny 
+
+### while
+while a==b: 
+else: 
+```
+
+### Функции
+
+```py
+def hello(name: int = 5 ) -> str: # объявление функции
+    """Print a Fibonacci series up to n.""" # описание функции  
+    return 'boo' # возврт значений из функции  
+    pass # заглушка   
+hello.__annotations__ # Печать данные о принимаемых и возвращаемых параметрах
+# Annotations: {'name': <class 'int'>, 'return': <class 'str'>}
+hello.__doc__ # Печать документации 
+# """Print a Fibonacci series up to n."""
+
+```
+
+### Файлы
+
+```py
+# Чтения файла по строкам
+with open("/path/to/file") as f:
+    for line in f:
+        print(line)
+        
+# Запись в файл строкой за строкой 
+f = open("/path/tofile", 'w')
+for e in aList:
+    f.write(e + "\n") 
+f.close()
+```
+
+
+
+### Обработка исключений
+
+```py
+Traceback (most recent call last):
+  File "main.py", line 27, in <module>
+    print(1 / a)
+ZeroDivisionError: division by zero 
+
+try:
+except ZeroDivisionError:
+except ValueError: 
+
+try: # Пример. Обработка ошибок сетевого соединения
+    response = requests.get(url)
+except requests.ConnectionError:
+return '<сетевая ошибка>'
+```
+
+## ООП
+
+Дополнительные материалы: 
+ - ООП в Pyton https://learn-free.site/python-oop-2020/ 
+
+> **Интерфейс класса** — это функциональная часть класса, через которую происходит взаимодействие 
+> с самим классом или с экземпляром этого класса.
+
+> **Наследование** — способ описать новый класс на базе существующего. 
+> При этом в дочернем классе можно сохранить или переопределить свойства и методы родительского класса.
+
+> **Инкапсуляция** — объединение и скрытие методов и свойств, и предоставление доступа к ним через простой внешний интерфейс.
+
+> **Полиморфизм** — возможность взаимодействовать с объектами разных типов через одинаковые интерфейсы, 
+<обращаться к свойствам и методам, общим для всех объектов.
+
+> 
+```py
+class Contact:
+    def __init__(self, name, phone, birthday):
+        self.name = name
+        self.phone = phone
+        self.birthday = birthday
+        print(f'Создан новый контакт: "{name}"')
+
+    def show(self):
+        print(f'Имя: {self.name}, '
+              f'телефон: {self.phone}, '
+              f'день рождения: {self.birthday}')
+
+    def __str__(self):
+        # Можно задать любую строку, например Не печатай меня, ведь я — объект!,
+        # но лучше пусть при печати выводится что-то осмысленное:
+        # название объекта и имя
+        return f'Контакт: {self.name}'
+
+# создаём объект:
+ivan = Contact(name='Иван', phone='+155512345', birthday='2.12.1985')
+# При создании объект будет напечатно: Создан новый контакт: "Иван"
+
+# печатаем объект:
+print(ivan)
+# Будет напечатано: "Контакт: Иван" 
+
+---
+
+class User:
+    def __init__(self, name, phone):
+        self.name = name
+        self.phone = phone
+
+    def show(self):
+        print(f'{self.name} ({self.phone})')
+
+
+# наследуем класс Friend от User
+class Friend(User):
+    # Пишем конструктор класса-наследника,
+    # чтобы он принимал все нужные параметры
+    def __init__(self, name, phone, address):
+        # наследуем функциональность конструктора из класса-родителя
+        super().__init__(name, phone)
+        # добавляем новую функциональность: свойство address
+        self.address = address
+
+    # полностью переопределяем родительский метод show()
+    def show(self):
+        print(f'Имя: {self.name} || '
+              f'Телефон: {self.phone} || '
+              f'Адрес: {self.address}') 
+```
+
+## Библиотеки. Полезные  модули
+
+### Подключение модулей
+
+```py
+### 
+import random # Подключение всего модуля. 
+random.random()
+import random as r # Подключение модуля под определенным именем
+r.random() 
+from random import choice, randint # Подключение отдельных функций
+randint(0, 23) # Можно вызывать не указывая модуль
+from random import * # Подлключение всех функций
+random() # Можно вызывать любую функцию не указывая модул
+```
+
+### random
+
+```py
+import random 
+random.randint(0, 23) # функция randint() генерирует случайное целое число  
+random.random() # случайное дробное число
+random.choice(list) # случайный элмент списка
+```
+
+### math
+
+```py
+import math 
+math.sqrt(16) # квадратный корень
+```
+### decimal
+
+```py
+import decimal # Работа с числами с фиксированной точностью
+```
+
+### datetime
+
+
+```py
+
+import datetime as dt
+dt.datetime(1961, 4, 12, 9, 7, 0) # 1961-04-12 09:07:00 
+landing_time - start_time # Можно вычитать даты. Результат: 1:48:00 -> тип timedelta
+dt.utcnow() #  текущий момент времени
+dt.datetime.utcnow() # прямой вызов текущего времени
+timedelta(days, hours, minutes, seconds, microseconds) # тип. хранение промежутков времени
+period = dt.timedelta(hours=3) # промежуток времени в три часа. 3:00:00 
+moscow_moment = dt.datetime.utcnow() + dt.timedelta(hours=3) # московское время
+dt.strftime('%H:%M') # форматированный вывод времени. 10:31 Параметры: %B — месяц, %Y — год и %S — секунды, %A — название дня недели по-английски, %U — номер недели в году
+```
+
+### requests и urllib
+
+```py
+import urllib.parse # Кириллица в адресной строке
+urllib.parse.quote(s) # зашифрованная строка  0%B0%D0%BA%D0%BE%D0%B5%20backend
+urllib.parse.unquote(encoded)  # расшифрованная обратно строка
+
+import requests
+response = requests.get('https://ya.ru/white') # запрос текста страницы
+response.text # текст страницы
+response.status_code # 200. код ответа
+response.headers # заголовки
+request_headers = {'Accept-Language': 'ru'}
+request_params = {'u': '', 'T': ''};    url = 'http://wttr.in'
+response = requests.get(url, params=request_params, headers=request_headers) # запрос с параметрами
+```
+
+### PIL Работа с картинками
+
+```py
+# Работа с картинками https://pypi.org/project/Pillow/
+from PIL import Image
+```
+
+# Алгоритмы
+
+
+
+## Однопроходные алгоритмы
+
+```py
+flag = flag or (x==find) # Проверка наличия значения find 
+### 
+ 
+```
+
+## Алгоритмы с массивами
+
+> Присваивание переменной другой переменной с **неизменяемым** значением 
+> осуществляется **по значению**. В первой переменной окажется дубликат 
+> значения второй переменной
+
+> Присваивание переменной другой переменной с **изменяемым** значением 
+> осуществляется **по ссылке**. В первой переменной окажется тот же объект, 
+> что и во второй. При изменении значения в любой из переменных изменятся 
+> данные в объекте и соответственно в обоих переменных
+
+```bash
+### Работа со стеком
+
+# Заполнение стека
+A=[0]*1000 #Пустой стек
+top=0 # Уровень стека (граница)
+x=int(input(x)) # вводим первое значение
+while x!=0: # запускаем цикл заполнения стека. допустим при введенном нуле 
+            # нужно остановиться
+  A[top]=x 
+  top += 1
+  x=int(input(x))
+  
+# перебор стека с конца
+for k in range(top, -1, -1) 
+  print(A[k]) # или А[k]=0
+```
+
+# Документирование
+
+ - [Статья по базовым аспектам документирования](https://pythonchik.ru/osnovy/dokumentirovanie-koda-v-python)
+
+Пример документирования класса: 
+
+```py
+
+class TextSplitter:
+    """
+    Класс TextSplitter используется для разбивки текста на слова
+    Основное применение - парсинг логов на отдельные элементы
+    по указанному разделителю.
+    Note:
+        Возможны проблемы с кодировкой в Windows
+    
+    Attributes
+    ----------
+    file_path : str
+        полный путь до текстового файла
+    lines : list
+        список строк исходного файла
+
+    Methods
+    -------
+    load()
+        Читает файл и сохраняет его в виде списка строк в lines
+    get_splitted(split_symbol=" ")
+        Разделяет строки списка по указанному разделителю
+        и возвращает результат в виде списка
+    """
+
+    def __init__(self, file_path: str):
+        self.file_path = file_path.strip()
+        self.lines = []
+
+    def load(self) -> None:
+        """Метод для загрузки файла в список строк lines
+
+        Raises
+        ------
+        Exception
+            Если файл пустой вызовется исключение
+        """
+
+        with open(self.file_path, encoding="utf-8") as f:
+            for line in f:
+                self.lines.append(line.rstrip('\n'))
+            if len(self.lines) == 0:
+                raise Exception(f"file {self.file_path} is empty")
+
+    def get_splitted(self, split_symbol: str = " ") -> list:
+        """Разбивает текстовые строки lines, преобразуя строку в 
+        список слов по разделителю
+
+        Если аргумент split_symbol не задан, в качестве разделителя
+        используется пробел
+
+        Parameters
+        ----------
+        split_symbol : str, optional
+            разделитель
+        """
+
+        split_list = []
+        for str_line in self.lines:
+            split_list.append(str_line.split(split_symbol))
+        return split_list
+
+```
+
+## 
+
+# Тестирование 
+
+### Модуль pytest
+
+```bash
+$ pip install pytest # установка pytest
+$ pytest --version # проверка установки и версии
+# Перейти в директорию с тестами 
+# ~/Dev/homework$ ls
+# homework.py pytest.ini tests
+$ pytest # Запустить pytest
+#Команда запустит все тесты из подпапки tests/
+```
+
+- Как используют в Яндексе https://habr.com/ru/company/yandex/blog/242795/
+- PyTest на Хабре https://habr.com/ru/post/269759/ 
+
+# Django
+
+ - [Документация](https://developer.mozilla.org/ru/docs/Learn/Server-side/Django) на developer.mozilla.org
+ - [Документация](https://django.fun/docs/) на django.fun
+
+##  Установка  
+
+```bash
+# Установка 
+pip install Django==2.2
+# scaffolding. Предварительные настройки проекта
+django-admin startproject yatube # Заполнить настройки проекта Yatube 
+
+# Создаст следующую структуру проекта 
+Yatube //папка проекта
+├── yatube //основная рабочая папка с кодом проекта
+|   ├── manage.py
+|   └── yatube //папка с настройками проекта
+|       ├── __init__.py
+|       ├── settings.py
+|       ├── urls.py
+|       └── wsgi.py
+├── venv //папка виртуального окружения
+├── README.md
+├── .gitignore
+
+# полный список команд Django
+python yatube/manage.py --help
+python manage.py createsuperuser # добавить администратора
+python manage.py runserver #запустить сервер
+
+python manage.py startapp post # создать новое приложение post
+# Структура файлов приложения
+posts
+├── __init__.py
+├── admin.py
+├── apps.py
+├── migrations
+│   └── __init__.py
+├── models.py
+├── tests.py
+└── views.py
+
+```
+
+
+## Django ORM (Object-Relational Mapping)
+
+[Документация](https://developer.mozilla.org/ru/docs/Learn/Server-side/Django/Models) 
+по полям модели на developer.mozilla.org
+
+[Документация Django ORM](https://docs.djangoproject.com/en/3.0/topics/db/queries/)
+
+### Django Python shell
+
+```bash
+Запуск:
+(venv) $ python manage.py shell 
+```
+
+Следующая команда импортирует библиотеку logging и включит вывод отладочной информации:
+[Документация по logging](https://docs.python.org/3/library/logging.html)
+
+```python
+>>> import logging
+>>> log = logging.getLogger('django.db.backends')
+>>> log.setLevel(logging.DEBUG)
+>>> log.addHandler(logging.StreamHandler()) 
+```
+
+
+
+### Создание модели
+
+```python
+"""
+Класс: Post
+Свойства:
+- Текст публикации
+- Дата публикации
+- Автор 
+"""
+
+# так выглядит синтаксис модели - класса, с которым работает ORM
+class Post(models.Model): # класс Post, наследник класса Model из библиотеки models
+    # свойство text типа TextField
+    text = models.TextField() 
+    
+    # свойство pub_date типа DateTimeField, текст "date published" это заголовок
+    # поля в интерфейсе администратора. auto_now_add говорит, что при создании
+    # новой записи автоматически будет подставлено текущее время и дата
+    pub_date = models.DateTimeField("date published", auto_now_add=True)
+    
+    # свойство author типа ForeignKey, ссылка на модель User
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts") 
+
+""" 
+Для всех моделей Django ORM создаст в БД таблицы. Описанные через синтаксис 
+имя_свойства = models.тип_данных() свойства модели определят названия и типы 
+данных в колонках таблицы БД
+
+Для модели Post в базе данных будет создана таблица с колонками text, 
+pub_date  и author, причём в колонке author должны быть указаны Primary Key 
+записей  из таблицы User
+
+Обратите внимание на поле author. Оно ссылается на автора поста, на модель 
+User, и для этого поля указано свойство related_name="posts". Тут снова 
+начинается магия: в каждом объекте модели User автоматически будет создано 
+свойство с таким же названием (posts), и в нём будут храниться ссылки на все
+объекты модели Post, которые ссылаются на объект User. На практике это 
+означает, что в объекте записи есть поле author, в котором хранится ссылка 
+на автора(например, admin), а в объекте пользователя admin появилось поле 
+posts, в котором хранятся ссылки на все посты этого автора. И теперь можно 
+получить список постов автора, обратившись к его свойству posts
+"""
+
+# ТИПЫ ПОЛЕЙ ORM
+# Описание всех стандартных типов полей:
+# https://docs.djangoproject.com/en/2.2/ref/models/fields/#field-types 
+models.TextField() # для хранения произвольного текста
+models.CharField(max_length=400) # символьное поле 
+
+models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")     
+# поле, в котором указывается ссылка на другую модель, 
+# на её Primary Key (pk). Параметр on_delete=models.CASCADE обеспечивает 
+# связность данных. если из таблицы User будет удалён пользователь, то будут  
+# удалены все связанные с ним посты.
+
+models.DateTimeField (auto_now_add=True) # для хранения даты и времени
+models.DateField()      # для хранения даты
+models.DurationField()  # промежутка времени
+models.TimeField()      # просто времени 
+
+models.BooleanField()   # для хранения данных типа bool
+models.EmailField()     # для хранения строки, но с обязательной проверкой синтаксиса email
+models.FileField()      # для хранения файлов
+models.ImageField()     # для хранения файлов картинок
+
+
+# Пример модели
+
+from django.db import models
+from django.contrib.auth import get_user_model
+
+USER_MODEL = get_user_model()
+
+class Group(models.Model):
+    """
+    Описание модели сообщества
+    """
+    title = models.CharField('Заголовок', max_length=200)
+    slug = models.SlugField('Имя сообщества', unique=True)
+    description = models.TextField('Описание сообщества')
+
+    def __str__(self):
+        return self.title
+
+
+class Post(models.Model):
+    """
+    Описание модели записи блога
+    """
+    text = models.TextField('Текст записи')
+    pub_date = models.DateTimeField('Дата публикации', auto_now_add=True)
+    author = models.ForeignKey(USER_MODEL,
+                               verbose_name='Автор',
+                               on_delete=models.CASCADE,
+                               related_name="posts"
+                               )
+    group = models.ForeignKey(Group,
+                              verbose_name='Сообщество',
+                              on_delete=models.CASCADE,
+                              related_name="group",
+                              blank=True,
+                              null=True
+                              )
+```
+
+### Выполнение миграции
+
+```bash
+# Добавить модели
+yatube/settings.py
+
+INSTALLED_APPS = [
+    'posts',  # наше приложение posts**
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+] 
+
+python manage.py makemigrations # Создание миграций. Создаст posts/migrations/0001_initial.py
+python manage.py migrate # Выполнение миграции (создание таблиц)
+
+```
+
+
+### CRUD-операции
+
+ - Create: ```Model.objects.create()``` — создание объекта в базе
+ - Read: ```Model.objects.get(id=N)``` — чтение объекта по его ключу
+ - Update: ```object.property= 'new value'``` и потом ```object.save()``` — изменение объекта
+ - Delete: ```object.delete()``` — удаление объекта из базы
+
+
+
+```commandline
+>>> from posts.models import Post, User
+>>> Post.objects.all() 
+Запрос к базе возвращает специальный объект QuerySet
+Чтобы получить определённый объект, можно обратиться к нему по его primary key
+me = User.objects.get(pk=3)
+```
+Новый объект в базе можно создать методом create():
+
+```commandline
+# создаём объект, передаём свойства
+>>> new = Post.objects.create(author=me, text="Смотри, этот пост я создал через shell!")
+# посмотрим, какой id присвоен этому объекту в базе
+>>> new.id
+39
+# а что в поле text?
+>>> new.text
+"Смотри, этот пост создан через shell!"
+# а что в поле author?
+>>> new.author
+<User: admin>
+# смотрим, что записано в поле username того объекта, на который ссылается поле author
+>>> new.author.username
+'admin' 
+```
+Чтобы изменить этот объект, надо присвоить новое значение одному из его полей и вызвать метод save()
+
+```commandline
+# присваиваем новое значение полю text
+>>> new.text = "Смотри, этот пост обновлён!"
+# но пока что значение изменено лишь в коде. В БД всё ещё хранится старое значение
+# чтобы отправить новое значение в базу данных — вызываем метод save()
+>>> new.save() 
+```
+
+Удалить объект из базы можно методом delete(). При вызове этот метод дополнительно 
+удалит и все связанные объекты, для которых был задан параметр ```on_delete=models.CASCADE```
+
+```commandline
+>>> new.delete() 
+```
+
+
+###  Фильтрация объектов
+
+```commandline
+# найти все объекты, значение поля author у которых равно me
+# в этой переменной хранится объект User с pk=3
+>>> Post.objects.filter(author=me)
+<QuerySet [<Post: Oops, I did it again!>, <Post: Утромъ гольдъ Дерсу Узала...>]>
+```
+
+Увидеть SQL-запрос, который будет отправлен к базе, можно с помощью команды ```.query```
+
+```commandline
+>>> print(Post.objects.filter(author=me).query)
+SELECT "posts_post"."id", "posts_post"."text", "posts_post"."pub_date", 
+"posts_post"."author_id", "posts_post"."group_id" FROM "posts_post" WHERE 
+"posts_post"."author_id" = 1 
+```
+
+В Django ORM аналог команд WHERE выглядит так: указывается имя поля, затем 
+два знака подчеркивания __, название фильтра и его значение:
+
+```commandline
+# найти посты, где поле text__содержит строку "again"
+>>> Post.objects.filter(text__contains='again')
+<QuerySet [<Post: Oops, I did it again!>]>
+```
+
+При запросе указываются именованные параметры функции filter(). 
+Имя параметра состоит из имени поля и суффикса, указывающего, какой оператор применять. 
+
+Доступные операторы:
+
+ - **exact** — точное совпадение. 
+
+```
+«Найти пост, где поле id точно равно 1»
+ORM: ```Post.objects.filter(id__exact=1)``` или ```Post.objects.filter(id=1)```
+```
+
+На SQL это условие выглядит так: ```SELECT ... WHERE id = 1.```
+Сравнение работает и с None. Выражение ```Post.objects.filter(text=None)``` 
+превратится в ```SELECT ... WHERE text IS NULL```
+
+ - **contains** — поиск по тексту в поле text. 
+
+```   
+«Найти пост, где в поле text есть слово "oops" именно в таком регистре»
+ORM: ```Post.objects.filter(text__contains="oops")```
+SQL: ```SELECT ... WHERE text LIKE '%oops%';```
+```
+
+ - **in** — вхождение в множество.
+   
+```
+«Найти пост, где значение поля id точно равно одному из значений: 1, 3 или 4»
+ORM: Post.objects.filter(id__in=[1, 3, 4])
+SQL: SELECT ... WHERE id IN (1, 3, 4);
+```
+
+Если вместо списка будет передана строка, она разобьётся на символы: 
+```
+«Найти пост, где значение поля text точно равно "o", "p" или "s"»
+ORM: Post.objects.filter(text__in="oops")
+SQL: SELECT ... WHERE text IN ('o', 'p', 's');
+```
+
+
+ - **Операторы сравнения** 
+   - gt — > (больше),
+   - gte — => (больше или равно),
+   - lt — < (меньше),
+   - lte — <= (меньше или равно).
+
+```
+«Найти пост, где значение поля id больше пяти»
+ORM: Post.objects.filter(id__gt=5)
+SQL: SELECT ... WHERE id>5;
+```
+ - **startswith, endswith** Операторы сравнения с началом и концом строки
+
+```
+«Найти посты, где содержимое поля text начинается со строки "Утромъ"»
+ORM: Post.objects.filter(text__startswith="Утромъ")
+SQL: SELECT ... WHERE text LIKE Утромъ% ESCAPE
+```
+
+ - **range** — вхождение в диапазон
+
+```py
+import datetime
+start_date = datetime.date(1890, 1, 1)
+end_date = datetime.date(1895, 3, 31)
+Post.objects.filter(pub_date__range=(start_date, end_date))
+# SQL: SELECT ... WHERE pub_date BETWEEN '1890-01-01' and '1895-03-31';
+# выберет посты, опубликованные в диапазоне с 1 января 1890 до 31 марта 1895 
+```
+
+При работе с частями дат можно применять дополнительные суффиксы 
+**date, year, month, day, week, week_day, quarter** и указывать для них дополнительные условия:
+
+Такой же синтаксис применяется и для времени: **hour, minute, second.**
+
+```python
+# условия для конкретной даты
+Post.objects.filter(pub_date__date=datetime.date(1890, 1, 1))
+Post.objects.filter(pub_date__date__lt=datetime.date(1895, 1, 1))
+# условия для года и месяца
+Post.objects.filter(pub_date__year=1890)
+Post.objects.filter(pub_date__month__gte=6)
+# условия для квартала
+Post.objects.filter(pub_date__quarter=1) 
+```
+
+ - **isnull** — проверка на пустое значение.
+
+```
+ORM: Post.objects.filter(pub_date__isnull=True)
+SQL: SELECT ... WHERE pub_date IS NULL;
+```
+
+#### Объединение условий
+
+В одном запросе можно указать несколько условий одновременно. Для этого последовательно 
+вызовите методы ```filter()``` с различными параметрами. Будет сгенерирован SQL-запрос, 
+в котором все условия объединены оператором ```AND```.
+Исключить данные из выборки можно методом ```exclude()```
+
+```py
+# выбрать посты, начинающиеся со слова "Утромъ" 
+# исключить из выборки посты автора me
+# и показать только те посты, которые опубликованы не ранее 30 января 1895 года
+>>> Post.objects.filter(
+...     text__startswith='Утромъ'
+... ).exclude(
+...     author=me 
+... ).filter(
+...     pub_date__gte=datetime.date(1895, 1, 30)
+... ) 
+```
+
+#### Сортировка и ограничение количества результатов
+
+```order_by("-pub_date")``` — сортировать результаты по полю ```pub_date``` в обратном порядке 
+(от больших значений к меньшим) ```[:11]``` — вернуть не более одиннадцати результатов из найденных.
+
+```commandline
+>>> print(Post.objects.order_by("-pub_date")[:11].query)
+SELECT "posts_post"."id", "posts_post"."text", "posts_post"."pub_date", 
+"posts_post"."author_id", "posts_post"."group_id" FROM "posts_post" ORDER 
+BY "posts_post"."pub_date" DESC LIMIT 11 
+```
+
+Сортировку и ограничение числа возвращаемых результатов можно объединить с фильтрацией:
+
+```commandline
+>>> Post.objects.filter(text__startswith='Утромъ').order_by("-pub_date")[:2] 
+```
+
+### Загрузка связанных записей
+
+Django предлагает два способа загрузки связанных записей:
+ - ```select_related(relation)``` — загрузка связанных данных с помощью JOIN. В результате обработки получается один запрос, который, помимо основной модели, загружает и связанные данные из дополнительных таблиц.
+ - ```prefetch_related(relation)``` — «ленивая» подгрузка связанных данных с помощью дополнительных запросов. В этом случае Django ORM сперва запрашивает данные из основной таблицы, запоминает первичные ключи связанных записей, а затем делает ещё один запрос для загрузки связанных данных, ключи которых есть в первой выборке.
+
+Для ```select_related``` хватило только одного запроса!
+```python
+>>> related = Post.objects.select_related('author').all()
+>>> for post in related:
+...     tmp = f"{post.text} Автор {post.author.username}"
+... 
+# запрашиваем данные FROM "posts_post"
+# и, дополнительно, данные автора INNER JOIN "auth_user":
+# всё в одном запросе
+(0.000) SELECT "posts_post"."id", "posts_post"."text", "posts_post"."pub_date", "posts_post"."author_id", "posts_post"."group_id", "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined" FROM "posts_post" INNER JOIN "auth_user" ON ("posts_post"."author_id" = "auth_user"."id"); args=()
+>>>
+```
+
+А вот так работает ```prefetch_related```:
+
+```python
+>>> related = Post.objects.prefetch_related('author').all()
+>>> for post in related:
+...     tmp = f"{post.text} Автор {post.author.username}"
+... 
+# запрашиваем все посты FROM "posts_post"
+(0.000) SELECT "posts_post"."id", "posts_post"."text", "posts_post"."pub_date", "posts_post"."author_id", "posts_post"."group_id" FROM "posts_post"; args=()
+# а теперь запрашиваем авторов FROM "auth_user", но только с перечисленными id: 
+# WHERE "auth_user"."id" IN (1, 2)
+# Django ORM получил список необходимых id из результатов первого запроса
+(0.000) SELECT "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined" FROM "auth_user" WHERE "auth_user"."id" IN (1, 2); args=(1, 2)
+```
+
+
+### Агрегирующие функции
+
+ - **count()** Чтобы узнать количество полученных строк, можно вызвать метод ```count()``` 
+   для ```objects```, дописав его к конструкции, делающей выборку
+   
+```python
+#  выбираем посты, опублибликованные позже (gt) июня 1854 года, затем пересчитываем их
+>>> Post.objects.filter(pub_date__month__gt=6, pub_date__year=1854).count()
+
+(0.012) SELECT COUNT(*) AS "__count" FROM "posts_post" WHERE (django_datetime_extract('month', "posts_post"."pub_date", 'UTC') > 6 AND "posts_post"."pub_date" BETWEEN '1854-01-01
+00:00:00' AND '1854-12-31 23:59:59.999999'); args=(6, '1854-01-01 00:00:00', '1854-12-31 23:59:59.999999')
+30 
+```
+
+- **aggregate()** - применяет агрегирующие функции к определённой выборке или ко всей таблице.
+
+В Django есть несколько агрегирующих функций, вот самые популярные из них:
+ - **Avg**: вернёт среднее значение по указанной колонке в выборке
+ - **Count**: вернёт количество записей в выборке, как и метод count(), описанный выше
+ - **Max**: вернёт максимальное значение по указанной колонке в выборке
+ - **Min**: вернёт минимальное значение по указанной колонке в выборке
+ - **Sum**: вернёт сумму значений по указанной колонке в выборке
+
+Эти функции хранятся в модуле django.db.models, перед применением их надо импортировать в код.
+
+```python
+>>> from django.db.models import Max, Count
+#  найти максимальное значение id для объектов Post
+>>> Post.objects.aggregate(Max("id"))
+(0.000) SELECT MAX("posts_post"."id") AS "id__max" FROM "posts_post"; args=()
+{'id__max': 43}
+
+#  пересчитать объекты id в модели Post
+>>> Post.objects.aggregate(Count("id"))
+(0.000) SELECT COUNT("posts_post"."id") AS "id__count" FROM "posts_post"; args=()
+{'id__count': 37}
+37 
+```
+
+### Связи между таблицами
+
+При создании модели Post мы добавили в неё ссылку на автора, на модель User, и указали 
+related_name="posts".
+
+```python
+class Post(models.Model):
+    # ... какой-то код
+    author = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="posts"
+    ) 
+```
+У модели User автоматически появится свойство posts, оно ссылается на все записи текущего автора.
+```python
+>>> leo = User.objects.get(id=2)
+(0.000) SELECT "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined" FROM "auth_user" WHERE "auth_user"."id" = 2; args=(2,)
+>>> leo.username
+'leo'
+
+>>> leo.posts.count()
+#  leo.posts — это выборка тех объектов из модели Post, 
+#  у которых в поле author_id стоит "2" (которые связаны с leo), 
+#  потому что leo — это объект User с id=2
+(0.000) SELECT COUNT(*) AS "__count" FROM "posts_post" WHERE "posts_post"."author_id" = 2; args=(2,)
+36 
+```
+Свойство posts у объекта модели User появилось в результате того, что модель Post 
+ссылается на User. И, благодаря магии ORM, мы можем получить все записи автора, 
+обратившись к свойству posts.
+
+Свойства, ссылающиеся на объекты, имеют специальный тип: менеджер объектов. 
+До сих пор мы работали с менеджером объектов objects, делая запросы вида 
+User.objects.get(id=2) или Post.objects.all()
+
+Чтобы применить агрегирующие функции к связанным данным из других таблиц, 
+запрос делается через аннотирование, методом annotate()
+
+ - **Метод annotate()** - в результате к полученным объектам добавляется новое свойство, содержащее результат вычисления
+В следующем примере аргумент posts_count — это имя нового свойства объекта, оно появится у объектов модели User:
+```python
+# Достать из модели User все объекты, 
+# создать свойство posts_count и записать в него число постов, связанных с автором.
+# posts — это свойство модели User, менеджер объектов
+>>>> annotated_results = User.objects.annotate(posts_count = Count('posts'))
+>>> 
+>>> annotated_results
+(0.001) SELECT "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined", COUNT("posts_post"."id") AS "posts_count" FROM "auth_user" LEFT OUTER JOIN "posts_post" ON ("auth_user"."id" = "posts_post"."author_id") GROUP BY "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined"  LIMIT 21; args=()
+<QuerySet [<User: admin>, <User: leo>]> 
+```
+
+```python
+#  перебрать в цикле список пользователей annotated_results 
+#  и для каждого объекта вывести свойство name
+#  и новое свойство posts_count, которое хранит число постов пользователя
+>>> for item in annotated_results:
+...     print(f"Постов у пользователя {item.username}: {item.posts_count}")
+... 
+(0.000) SELECT "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined", COUNT("posts_post"."id") AS "posts_count" FROM "auth_user" LEFT OUTER JOIN "posts_post" ON ("auth_user"."id" = "posts_post"."author_id") GROUP BY "auth_user"."id", "auth_user"."password", "auth_user"."last_login", "auth_user"."is_superuser", "auth_user"."username", "auth_user"."first_name", "auth_user"."last_name", "auth_user"."email", "auth_user"."is_staff", "auth_user"."is_active", "auth_user"."date_joined"; args=()
+Постов у пользователя admin: 2
+Постов у пользователя leo: 36
+#  хорошо, что у нас пока что не 100500 авторов 
+```
+Разница между annotate() и aggregate():
+
+Метод annotate() возвращает объекты и добавляет к ним новые свойства:
+```python
+>>> rez = User.objects.annotate(written_posts = Count('posts'))
+>>> rez[1].written_posts
+36
+#  у объекта класса User появилось свойство written_posts, 
+#  хотя в модели User оно не описано
+```
+Метод aggregate() отдает только значение, результат работы агрегирующей функции:
+```python
+>>> Checks.objects.aggregate(average_price=Avg('price'))
+{'average_price': 127.01}
+```
+
+
+
+## Создание пользователей
+
+Создание суперпользователя: 
+```bash
+python manage.py createsuperuser 
+http://127.0.0.1:8000/admin/ # админка
+```
+
+### Модуль django.contrib.auth
+
+В состав исходного кода фреймворка Django входит директория /contrib — «склад 
+полезных вещей», набор готовых приложений для решения стандартных задач. Приложение 
+django.contrib.auth было установлено автоматически вместе с Django при подготовке окружения. 
+
+В модуле django.contrib.auth есть файл urls.py:
+
+```python
+from django.contrib.auth import views
+from django.urls import path
+
+urlpatterns = [
+        path('login/', views.LoginView.as_view(), name='login'),
+        path('logout/', views.LogoutView.as_view(), name='logout'),
+   
+        path('password_change/', views.PasswordChangeView.as_view(), name='password_change'),
+        path('password_change/done/', views.PasswordChangeDoneView.as_view(), name='password_change_done'),
+       
+        path('password_reset/', views.PasswordResetView.as_view(), name='password_reset'),
+        path('password_reset/done/', views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+        path('reset/<uidb64>/<token>/', views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+        path('reset/done/', views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+]
+```
+По именам (параметр name)  для URL-шаблонов списка urlpatterns можно будет обращаться к страницам.
+
+Если посмотреть исходный код модуля django/contrib/auth/views.py то мы найдём множество Class Based View.
+Class Based View — это классы, по своему назначению аналогичные view-функциям, они так же обрабатывают запросы и возвращают ответ.
+Поищите в файле названия классов, в имени которых есть слово "View", и найдите 
+в них свойство template_name: это предустановленные названия шаблонов, необходимых для работы с пользователями
+
+```python
+class LoginView(SuccessURLAllowedHostsMixin, FormView):
+    template_name = 'registration/login.html'
+class LogoutView(SuccessURLAllowedHostsMixin, TemplateView):
+    template_name = 'registration/logged_out.html'
+class PasswordResetView(PasswordContextMixin, FormView):
+    template_name = 'registration/password_reset_form.html'
+class PasswordResetDoneView(PasswordContextMixin, TemplateView):
+    template_name = 'registration/password_reset_done.html'
+class PasswordResetConfirmView(PasswordContextMixin, FormView):
+    template_name = 'registration/password_reset_confirm.html'
+class PasswordResetCompleteView(PasswordContextMixin, TemplateView):
+   template_name = 'registration/password_reset_complete.html'
+class PasswordChangeView(PasswordContextMixin, FormView):
+    template_name = 'registration/password_change_form.html'
+class PasswordChangeDoneView(PasswordContextMixin, TemplateView):
+    template_name = 'registration/password_change_done.html' 
+```
+
+ - LoginView — страница с формой авторизации;
+ - LogoutView — страница выхода, дающая пользователю возможность прекратить работу с сайтом;
+ - PasswordResetView — страница восстановления пароля, здесь можно ввести свой email и получить ссылку для восстановления доступа;
+ - PasswordResetDoneView — страница уведомления о том, что ссылка на восстановление пароля отправлена;
+ - PasswordChangeView — эта страница будет доступна по ссылке при восстановлении пароля, здесь пользователь сможет задать новый пароль;
+ - PasswordChangeDoneView — страница уведомления о том, что пароль изменён.
+
+В этом списке не хватает страницы регистрации, её мы создадим отдельно.
+
+Надо будет создать такие шаблоны для нашего проекта Yatube в users/templates/:
+
+```
+registration/login.html
+registration/logged_out.html
+registration/password_reset_form.html
+registration/password_reset_done.html
+registration/password_reset_confirm.html
+registration/password_change_form.html
+registration/password_change_done.html
+И еще signup.html для регистрации новых пользователей
+```
+
+Создание отдельного приложения users
+Для того чтобы собрать весь код для управления регистрацией пользователей в одном месте, самостоятельно создайте новое приложение users и добавьте его в начало списка INSTALLED_APPS в конфиге сайта.
+Скорее всего, вам пригодится консольная команда
+
+```commandline
+$ python manage.py startapp 
+```
+
+
+
+## Регистрация модели в админке
+
+```python
+# в файле posts/admin.py
+@admin.register(Post)
+class PostAdmin(admin.ModelAdmin):
+    """
+    Описание модели постов для адин. страницы
+    """
+    list_display = ("pk", "text", "pub_date", "author") # поля в таблице 
+    search_fields = ("text",) # поля для поиска 
+    list_filter = ("pub_date",) # поля для фильтра
+    empty_value_display = "-пусто-"
+```
+
+### Конфигурация модели
+
+```python
+"""
+Для настройки отображения модели в интерфейсе админки применяют класс  
+ModelAdmin. Он связывается с моделью и конфигурирует отображение данных этой 
+модели. В этом классе можно настроить параметры отображения. Полный список  
+параметров есть в документации.
+
+В файле posts/admin.py создайте класс PostAdmin, наследующийся от  admin.
+ModelAdmin, и зарегистрируйте его как источник конфигурации для модели Post
+"""
+
+from django.contrib import admin
+from .models import Post
+
+class PostAdmin(admin.ModelAdmin):
+    # перечисляем поля, которые должны отображаться в админке
+    list_display = ("text", "pub_date", "author") 
+    # "pk" для вывода ключа, ID записи
+    # list_display = ("pk", "text", "pub_date", "author") 
+    
+    # добавляем интерфейс для поиска по тексту постов
+    search_fields = ("text",) 
+    # добавляем возможность фильтрации по дате
+    list_filter = ("pub_date",) 
+    # это свойство сработает для всех колонок: где пусто - там будет эта строка
+    empty_value_display = "-пусто-"  
+# при регистрации модели Post источником конфигурации для неё назначаем класс 
+# PostAdmin
+admin.site.register(Post, PostAdmin)
+```
+Остальные поля для управления выводом модели в админке:
+https://docs.djangoproject.com/en/3.0/ref/contrib/admin/#django.contrib.admin.ModelAdmin
+
+## Проектирование структуры адресов
+
+ - Данные проекта хранятся в БД.
+ - Для взаимодействия с БД в коде создаются модели.
+ - Пользователь обращается к какой-то странице сайта, Django сверяет 
+   запрошенный адрес с шаблонами адресов в файле urls.py.
+ - Каждый шаблон адреса в urls.py связан с определённой функцией или классом, 
+   которые обрабатывают входящие данные. Такие функции (или классы) 
+   называются View 
+ - View обращается к моделям и через них получает необходимые данные из БД.  
+   Эти данные View передает в шаблоны (Template).
+ - Данные выводятся в шаблон и генерируется HTML-документ, который
+   возвращается пользователю.
+
+```python
+# Примеры: 
+urlpatterns = [
+# правила для сопоставления шаблонов URL и функций
+    path('', include("posts.urls"))
+    path('', views.index), 
+    path('user', views.account),
+    path('user/<int:user-id>', views.user_page),
+    path('user/login', views.login),
+    path('user/<str: user-name>', views.user_page_name),
+] 
+# Urls.py проекта: yatube/urls.py
+from django.contrib import admin
+from django.urls import include, path
+
+urlpatterns = [
+    # импорт правил из приложения posts
+    path("", include("posts.urls")),
+    # импорт правил из приложения admin
+    path("admin/", admin.site.urls),
+] 
+
+# Urls.py приложения posts/urls.py
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path("", views.index, name="index")
+]
+```
+
+Функция path() принимает такие параметры: path(route, view, name):
+ - route — шаблон веб-адреса (URL). Получив HTTP-запрос, Django идет по 
+   списку urlpatterns сверху вниз, пока не найдёт совпадение запрошенного адреса с 
+   route в одном из вызовов path(). Если нет ни одного совпадения, 
+   пользователю вернётся сообщение об ошибке 404: «Страница не найдена».
+ - view — это имя view-функции. Если Django найдёт совпадение с шаблоном, то 
+   перенаправит вызов в указанную view-функцию.
+ - name — имя для path(), к нему можно обратиться из кода, чтобы установить 
+   ссылку на страницу сайта.
+
+Дополнительные параметры функции path(), о которых можно прочесть в 
+[документации](https://docs.djangoproject.com/en/3.0/ref/urls/#django.urls.path)
+
+## Настройка статичных файлов (static)
+
+Перед публикацией проекта на боевом сервере все статические файлы проекта 
+собираются в единую директорию. Сборка запускается командой collectstatic
+
+Создайте две директории с названием static: одну в корне проекта, для сборки, 
+вторую — в приложении posts, для статики приложения. В файл yatube/settings.py 
+после переменной STATIC_URL добавьте новую переменную STATIC_ROOT
+
+```python
+# задаём адрес директории, куда командой *collectstatic* будет собрана вся статика
+STATIC_ROOT = os.path.join(BASE_DIR, "static") 
+```
+Добавить папки статики в .gitignore
+
+Если по каким-то причинам необходимо назвать папку со статикой иным именем — 
+адрес такой папки нужно зарегистрировать в переменной STATICFILES_DIRS 
+в yatube/settings.py
+
+Обычно статику собирают в отдельную директорию прямо перед публикацией проекта 
+на боевом сервере. Отдавать клиенту файлы из этой директории будет отдельный, 
+быстрый и эффективный, сервер, например — nginx
+
+[Файлы Bootstrap от Яндекс](https://code.s3.yandex.net/backend-developer/learning-materials/static.zip)
+для статики
+
+
+
+## View обработка
+
+В файл posts/views.py добавить views-функцию index
+```python
+# Пример работы с view
+from django.http import HttpResponse
+from .models import Post
+
+def index(request):
+    # одна строка вместо тысячи слов на SQL
+    latest = Post.objects.order_by('-pub_date')[:10]
+    # собираем тексты постов в один, разделяя новой строкой
+    output = []
+    for item in latest:
+        output.append(item.text)
+    return HttpResponse('\n'.join(output))
+
+# Еще пример работы с view
+from django.shortcuts import render, get_object_or_404
+from .models import Post, Group
+
+def index(request):
+    latest = Post.objects.order_by('-pub_date')[:11]
+    return render(request, 'index.html', {"posts": latest})
+
+def group_posts(request, slug):
+    group = get_object_or_404(Group, slug=slug)
+    posts = Post.objects.filter(group=group).order_by("-pub_date")[:12]
+    return render(request, 'group.html', {"group": group, "posts": posts})
+
+Post.objects.all() # получить все записи модели Post
+Post.objects.get(id=1) 
+# получить запись модели Post, у которой значение 
+# поля id равно 1. Поскольку поле id — это первичный ключ, а Django 
+# автоматически создаёт у модели свойство pk, то альтернативная запись этого 
+# же запроса будет такой: Post.objects.get(pk=1).
+Post.objects.filter(pub_date__year=1854) 
+# запрос вернёт объекты, у которых 
+# значение года в поле pub_date равно 1854. Обратите внимание на синтаксис 
+# фильтрации: двойное нижнее подчёркивание между названиями поля и фильтра. 
+# Подробнее о функции filter() в документации:
+# https://docs.djangoproject.com/en/3.0/ref/models/querysets/#django.db.models.query.QuerySet.filter
+Post.objects.filter(text__startswith="Писать не хочется") # пример фильтра 
+# по текстовому полю, он вернёт записи, начинающиеся с указанной в фильтре 
+# строки.
+
+get_object_or_404() # Функция ищет в базе объект модели, и если не находит — 
+# прерывает работу view-функции и возвращает страницу с ошибкой 404
+
+
+```
+
+## Шаблоны 
+
+### Установка директории templates
+
+```python
+# директория в главной папке проекта
+TEMPLATES_DIR = os.path.join(BASE_DIR, "templates") 
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [TEMPLATES_DIR], #Указать путь к шаблонам
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+            ]
+        },
+    }
+] 
+```
+
+### Рендеринг шаблона
+
+```python
+from django.shortcuts import render
+
+def my_index(request):
+    # какой-то код
+    title = 'Заголовок страницы'
+    body = 'Текст страницы'
+    # Сгенерированные во view-функции данные сохраняем в словарь
+    context = {'title': title, 'body': body}
+
+    # вызов функции render():
+    # первый параметр — это всегда request, объект запроса
+    # второй параметр - имя шаблона, в который будут "обёрнуты" данные
+    # третий параметр - словарь с переменными, которые передаются  в шаблон
+    return render(request, 'index.html', context) 
+```
+
+```html
+<h1>{{ title }}</h1>
+<p>{{ body }}</p> 
+```
+
+В словаре context можно передать в шаблон любые данные: строки, списки, словари,
+объекты классов — всё, что необходимо. Обратиться в шаблоне к элементу словаря, 
+свойству объекта или элементу списка можно через точечную нотацию:
+
+```html
+{{ var_dict.key }} — обращение к ключу словаря
+{{ var_instance.attribute }} — обращение к свойству или методу класса
+{{ var_list.0 }} — обращение к элементу списка 
+```
+
+### Теги
+
+[Документация](https://docs.djangoproject.com/en/2.2/ref/templates/builtins/#ref-templates-builtins-tags) 
+по тегам шаблонизатора
+
+Для более сложных конструкций, влияющих на логику исполнения кода, существуют 
+элементы разметки, теги. Это иное, чем HTML-теги, в коде они выделяются 
+конструкциями {% и %}. Теги шаблонизатора могут быть одиночные:
+
+```html
+{% include "footer.html" %} 
+```
+или парные, состоящие из открывающего и закрывающего тегов: 
+```html
+{% block %}
+  тело тега
+{% endblock %} 
+```
+
+```html
+{% if user.is_authenticated %}
+  Привет, {{ user.username }}.
+{% else %}
+  Будет здорово, если вы авторизуетесь!
+{% endif %}
+```
+
+Комментарии
+```html
+{% comment "Опциональный текст, комментарий к комментарию" %}
+  <p>Этот кусок шаблона временно отключен {{ create_date|date:"c" }}</p>
+  <p>Уходя, гасите свет.</p>
+{% endcomment %}
+
+{# Однострочный комментарий, пригодится для заметок **#}
+<!-- И это -- тоже комментарий -->
+```
+
+### Фильтры в HTML-шаблонах 
+
+[Документация](https://docs.djangoproject.com/en/3.0/ref/templates/builtins/#ref-templates-builtins-filters) 
+по фильтрам шаблонизатора
+
+Фильтры обрабатывают значения переменных или аргументов других тегов. В коде 
+фильтры присоединяются к имени переменной через символ |
+
+**length** - Вернёт длину строки или последовательности, переданной в переменной
+variable:
+```html
+{{ variable|length }} 
+```
+
+**safe** - Чтобы HTML-теги не вываливались на страницу, а выполняли своё 
+предназначение (форматировали и структурировали страницу) — в шаблоне необходимо
+применять фильтр safe
+```python
+# views.py
+...
+def poem(request):
+    text = ('Вчера Крокодил<br>улыбнулся так злобно,<br>Что мне до сих '
+            'пор<br>за него неудобно.<br><i>Рената Муха</i>'
+            )
+    context = {'poem': text}
+    render(request, 'poem.html', context) 
+```
+```html
+{# poem.html #}
+<h2>Стихотворение</h2>
+{{ poem|safe }} 
+```
+
+**linebreaksbr** - Он заменяет символы перевода строки \n на HTML-теги \<br>.
+
+**date** - работает только с объектами типа date и datetime: он форматирует дату
+[по маске](https://docs.djangoproject.com/en/2.2/ref/templates/builtins/#date). 
+За основу взят стандарт, принятый в языке программирования PHP. 
+```html
+{{ pub_date|date:"j.m.Y" }} {# выведет 2.02.2020 #} 
+{{ pub_date|date:"j F Y" }} {# выведет 2 февраля 2020 #}
+{{ pub_date|date:"d.m.y" }} {# выведет 02.02.20 #}
+{{ pub_date|date:"d M Y" }} {# выведет 02 фев 2020 #} 
+```
+
+Фильтры можно объединять в цепочку:
+
+```html
+{{ variable|title|truncatewords:4 }} 
+```
+
+### Пример Template
+
+```html
+{# шаблон base.html **#}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>
+    {% block title %}
+      The Last Social Media You'll Ever Need | Yatube
+    {% endblock %}
+  </title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  {% include "header.html" %}
+  <nav id="sidebar">
+    {% block sidebar %}
+    <ul>
+      <li><a href="/">Главная</a></li>
+      <li><a href="/about/">О сайте</a></li>
+      <li><a href="/list/">Сообщения</a></li>
+    </ul>
+    {% endblock %}
+  </nav>
+  <div id="content">
+  {% block content %}
+    Контент не подвезли :(
+  {% endblock %}
+  </div>
+  {% include "footer.html" %}
+</body>
+</html> 
+```
+
+```html
+{# шаблон header.html **#}
+<div id="top-of-site">
+{# здесь описана шапка сайта, она повторяется на всех страницах проекта #}
+  <img src="images/logo.jpg" alt="Yatube" />
+  <div id="site-name">Yatube</div>
+</div>
+```
+
+```html
+{# шаблон footer.html **#}
+<div id="bottom-of-site">
+{# здесь описан «подвал» сайта, он одинаков для всех страниц проекта #}
+  <img src="images/logo.jpg" alt="Yatube" /> Yatube
+  <div id="copyright">© Все права принадлежат всем</div>
+</div>c 
+```
+Все шаблоны, подключенные через include, могут напрямую работать со словарём context
+
+Для переопределения содержимого в теге block применяют тег extends:
+Одиночный тег extends сообщает системе, в каком шаблоне нужно переопределить 
+блоки, описанные следом за этим тегом
+
+```python
+from django.shortcuts import render
+
+def messages(request):
+    # какой-то код
+    title = 'Ваши сообщения'
+    messages = [
+        'Вы почти разобрались с шаблонами!', 
+        'Сломалось? Бывает, не беда.',
+        'У вас получится!', 
+    ]
+    # Сгенерированные во view-функции данные сохраняем в словарь
+    context = {'title': title, 'messages': messages}
+
+    # вызов функции render():
+    # первый параметр — это всегда request, объект запроса
+    # второй параметр - имя шаблона, в который будут "обёрнуты" данные
+    # третий параметр - словарь с переменными, которые передаются  в шаблон
+    return render(request, 'messages.html', context) 
+```
+Из view-функции вызван шаблон messages.html. В самом начале этого шаблона стоит 
+тег {% extends "base.html" %}, а в коде определены блоки title, sidebar и 
+content: блоки с такими же названиями есть и в шаблоне base.html.
+
+```html
+{# шаблон messages.html #}
+
+{% extends "base.html" %}
+
+{# Задали заголовок в блоке title, текст заголовка взяли из словаря context #}
+{% block title %}
+  {{ title }}
+{% endblock %}
+
+{% block sidebar %}
+  <ul>
+    <li><a href="/">Главная</a></li>
+    <li><a href="/about/">О сайте</a></li>
+    {# Ссылку на страницу "Сообщения" сделали простым текстом и покрасили в красный #}
+    <li><span style="color: red;">Сообщения</span></li>
+  </ul>
+{% endblock %}
+
+{% block content %}
+  {# Вывели все сообщения из списка context, как в Python #}
+  {% for msg in messages %}
+    <p>{{ msg }}</p>
+  {% endfor %}
+{% endblock %} 
+```
+Когда Django вызывает какой-то шаблон и видит в нём тег extends 
+"any_template.html", то 
+ - будет вызван шаблон any_template.html; при необходимости в нём будут 
+   выполнены все инструкции из тегов {% include ... %};  
+ - в шаблоне any_template.html будут заменены все одноимённые блоки, которые в 
+   вызванном шаблоне перечислены по именам после тега extends.
+
+### Ветвления, циклы и ссылки
+
+#### Ветвления
+
+Тег ветвления (тег проверки условия) if похож на оператор ветвления в Python
+
+```html
+{% if news %}
+    У вас {{ news|length }} обновлений новостей
+{% elif is_holiday %}
+    Новостей нет, сегодня же праздник!
+{% else %}
+    Сегодня нет новостей.
+{% endif %} 
+```
+В условиях {% if %} работают операторы сравнения <, >, <=, >=, !=, ==, 
+логические операторы or, and, not, операторы тождественности is и вхождения in, 
+круглые скобки и стандартные правила приоритета операций.
+
+В условиях можно применять и фильтры:
+```html
+{% if news|length >= 100 %}
+ Сегодня больше сотни новостей! Что случилось?
+{% endif %}
+```
+
+#### Циклы 
+
+**for**
+
+Тег for выполняет определённый код для каждого элемента списка, переданного в цикл.
+
+```html
+{% for key, value in dict_data.items %}
+    Ключ '{{ key }}': Значение '{{ value }}'
+{% endfor %} 
+```
+Помимо обычных переменных в циклах создаются и вспомогательные, они доступны в специальной переменной forloop:
+ - forloop.counter — текущий счетчик выполнений цикла, начинается с 1;
+ - forloop.counter0 — текущий счетчик выполнения цикла, начинается с 0;
+ - forloop.revcounter — сколько итераций осталось до конца цикла, начинается с 1;
+ - forloop.revcounter0 — сколько итераций осталось до конца цикла, начинается с 0;
+ - forloop.first — вернёт True на первой итерации цикла, в остальных случаях вернёт False;
+ - forloop.last — вернёт True на последней итерации цикла, в остальных случаях вернёт False;
+ - forloop.parentloop — если цикл был запущен внутри другого цикла, то в этой переменной находится переменная forloop родительского цикла.
+
+**empty**
+
+Необязательный тег {% empty %}, вложенный в for, сработает, если переданный в цикл список пуст:
+
+```html
+<ul>
+{% for news in news_list %}
+    <li>{{ news.title }}</li>
+{% empty %}
+    <li>Список новостей пуст.</li>
+{% endfor %}
+</ul> 
+```
+
+**ifchanged**
+
+Вложенный в for тег {% ifchanged %} запоминает значение переданных параметров
+или своего тела между запусками цикла, — и если они не поменялись, скрывает его.
+В этом листинге HTML-заголовок \<h2> с названием месяца будет выводиться на 
+страницу только если в предыдущей итерации цикла название месяца было другим.
+
+```html
+<h1>Архив новостей за {{ year }}</h1>
+
+{% for news in news_items %}
+    {% ifchanged %}
+        <h2>{{ news.pub_date|date:"F" }}</h2>
+    {% endifchanged %}
+
+    <h3>{{ news.pub_date|date:"d.m.Y" }} | {{ news.title}}</h3>
+{% endfor %} 
+```
+В результате работы цикла получится примерно такой HTML-код:
+```html
+<h1>Архив новостей за 2019</h1>
+<h2>Январь</h2>
+<h3>1.01.2019 | С Новым Годом!</h3>
+<h3>2.01.2019 | С Днём научной фантастики!</h3>
+<h3>3.01.2019 | С Днём рождения соломинки для коктейлей!</h3>
+<h2>Февраль</h2>
+<h3>1.02.2019 | С Днём работника лифтового хозяйства!</h3>
+<h3>2.02.2019 | С Днём сурка!</h3>
+<h3>2.02.2019 | С Днём сурка!</h3>
+<h3>2.02.2019 | С Днём сурка!</h3>
+```
+
+**url**
+
+Тег {% url %} генерирует ссылки на страницы проекта. Из кода шаблона можно 
+обратиться к именам адресов, зарегистрированных в списке urlpatterns в файле 
+urls.py, и передать параметры, если они требуются:
+
+```python
+urlpatterns = [
+    path('', views.index, name='index'),
+    path('/detail/<int:pk>/', views.details, name='detail'),
+    ...
+]
+```
+Первый параметр тега url — это name пути из файла urls.py:
+```html
+<a href="{% url 'index' %}">Главная</a>
+```
+```html
+urlpatterns = [
+    path('/detail/<int:pk>/', views.details, name='detail'),
+    path('/<str:username>/<int:id>/', views.article, name='article'),
+]
+
+{# передаём один параметр #}
+<a href="{% url 'detail' 1 %}">Подробнее об объекте 1</a> {# получится ссылка detail/1 #}
+<a href="{% url 'detail' pk=1 %}">Подробнее об объекте 1</a>
+<a href="{% url 'detail' pk=object.id %}">Подробнее об объекте {{ object.id }}</a>
+
+{# передаём несколько параметров #}
+<a href="{% url 'article' 'anton' 16 %}">Статья с ID=16, автор: anton</a>
+<a href="{% url 'article' username='anton' id=16 %}">Статья с ID=16, автор: anton</a>
+<a href="{% url 'article' username=article.username id=article.id %}">Статья с ID={{ article.id }}, 
+   автор: {{ article.username }}</a> 
+```
+
+### Включение статики в шаблоны
+
+```bash
+python manage.py collectstatic
+```
+
+После того как вы собрали статику и запустили проект с помощью команды runserver, 
+можете попробовать открыть какой-нибудь файл из директории STATIC_ROOT через HTTP.
+Например, по ссылке http://127.0.0.1:8000/static/bootstrap/dist/js/bootstrap.js 
+в браузере откроется код JavaScript-библиотеки.
+Ссылка состоит из нескольких частей:
+
+ - http://127.0.0.1:8000/ — адрес вашей локальной машины и порт, на котором запущен Django.
+ - /static/ — эта часть пути управляется служебным приложением 
+   Django django.contrib.staticfiles. Поменять эту часть пути вы можете в переменной 
+   STATIC_URL в файле настроек проекта yatube/settings.py
+ - bootstrap/dist/js/bootstrap.js — это путь к файлу в папке STATIC_ROOT
+
+Чтобы добавить ссылку на подгрузку файла в шаблон, необходимо загрузить модуль для работы 
+со статикой командой {% load static %}, а в адресах подключаемых файлов применять 
+тег {% static "адрес_файла_относительно_директории_статики" %}:
+
+```html
+{% load static %}
+<script src="{% static "bootstrap/dist/js/bootstrap.js" %}"></script> 
+```
+
+### Базовый шаблон
+
+Создадим базовый HTML-файл на основе [примера](https://getbootstrap.com/docs/4.3/getting-started/introduction/#starter-template) 
+из документации по Bootstrap и определим стандартные блоки для заголовка страницы и тела
+
+```html
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{% block title %}The Last Social Media You'll Ever Need{% endblock %} | Yatube</title>
+    <!-- Загрузка статики -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}">
+    <script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
+</head>
+
+<body>
+
+    <main>
+        <div class="container">
+            <h1>{% block header %}The Last Social Media You'll Ever Need{% endblock %}</h1>
+            {% block content %}
+            <!-- Содержимое страницы -->
+            {% endblock %}
+        </div>
+    </main>
+
+</body>
+
+</html> 
+```
+
+Сохраните этот файл в папку templates под именем base.html. Теперь измените 
+шаблон главной страницы index.html:
+
+```html
+{% extends "base.html" %}
+{% block title %}Последние обновления на сайте{% endblock %}
+{% block header %}Последние обновления на сайте{% endblock %}
+{% block content %}
+
+    {% for post in posts %}
+    <h3>
+        Автор: {{ post.author.get_full_name }}, Дата публикации: {{ post.pub_date|date:"d M Y" }}
+    </h3>
+    <p>{{ post.text|linebreaksbr }}</p>
+    {% if not forloop.last %}<hr>{% endif %}
+    {% endfor %}
+
+{% endblock %}
+```
+
+### Добавление шапки и подвала сайта 
+
+Создайте файл templates/nav.html с таким содержимым:
+```html
+<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+    <a class="navbar-brand" href="/"><span style="color:red">Ya</span>tube</a>
+    <nav class="my-2 my-md-0 mr-md-3">
+        {% if user.is_authenticated %}
+        Пользователь: {{ user.username }}.
+        <a class="p-2 text-dark" href="{% url 'password_change' %}">Изменить пароль</a>
+        <a class="p-2 text-dark" href="{% url 'logout' %}">Выйти</a>
+        {% else %}
+        <a class="p-2 text-dark" href="{% url 'login' %}">Войти</a> |
+        <a class="p-2 text-dark" href="{% url 'signup' %}">Регистрация</a>
+        {% endif %}
+    </nav>
+</nav>
+```
+
+Подключите файл templates/nav.html к базовому шаблону templates/base.html тегом {% include %}:
+
+```html
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>{% block title %}The Last Social Media You'll Ever Need{% endblock %} | Yatube</title>
+        <!-- Загрузка статики -->
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}">
+        <script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
+        <script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
+    </head>
+    <body>
+        {% include 'nav.html' %}
+        <main>
+            <div class="container">
+                {% block content %}
+                <!-- Содержимое страницы -->
+                {% endblock content %}
+            </div>
+        </main>
+
+    </body>
+</html>
+```
+Тем же способом добавьте файл шаблона для блока, отображаемого внизу страницы, его называют «подвал» или "footer". Назовём его footer.html
+
+```html
+<footer class="pt-4 my-md-5 pt-md-5 border-top">
+    <p class="m-0 text-dark text-center ">Социальная сеть <span style="color:red">Ya</span>tube </p>
+</footer>
+```
+
+
+## Формы
+
+### Generic Views
+
+При обращении к какому-нибудь URL специальный обработчик path() вызывает объект, 
+передавая ему в качестве аргумента объект типа request, а на выходе ожидает объект типа response.
+Вызываемым объектом может быть view-функция, но можно вызвать классы и их методы.
+ - View-функция — такие функции называют ещё «функции представления» (от слова "view") или просто «представление». Это самый простой тип view-объектов. Функция получает на вход стандартный объект request и возвращает объект типа response. Объекты response могут быть созданы встроенными функциями-помощниками, например, функцией render(). Вызов view-функции: path('view/', my_view)
+ - Class-based view — по аналогии название можно перевести как «представление, основанное на классе» или «представление-класс». Мы будем использовать термин «view-класс». Такой класс должен наследоваться от специальных родительских классов Generic Views. Из файлов urls.py можно вызывать метод view-класса as_view(). Вызов метода view-класса: path('view/', ClassName.as_view())
+
+Generic Views — это встроенные в Django view-классы, созданные для решения стандартных задач. В переводе Generic Views — это «общий вид» или «базовое представление». Популярные Generic Views:
+ - FormView обрабатывает формы на основе моделей.
+ - TemplateView упрощает вывод данных в шаблон.
+ - CreateView связывает модель и пользовательскую веб-форму, предназначенную для создания новой записи в базе.
+
+На основе Generic Views создают классы-наследники: view-классы, обладающие свойствами и методами Generic Views; это классическое ООП в действии.
+
+### Связь модели, формы и view-класса
+
+Создание форм на основе моделей:
+1. Создаётся (или выбирается существующая) модель.
+2. На основе модели создаётся класс формы.
+3. Объект формы (экземпляр, созданный на основе класса формы) передаётся в специальный view-класс.
+4. View-класс передаёт объект формы в шаблон, создаёт и возвращает пользователю страницу с веб-формой.
+
+Для создания форм на основе моделей есть предустановленный класс ModelForm: от него можно наследовать классы для генерации форм.
+Вот пример создания формы через ModelForm:
+
+```python
+    from django.db import models
+    from django.forms import ModelForm
+    
+    
+    # создадим модель, в которой будем хранить данные формы
+    class Book(models.Model):
+        name = models.CharField(max_length=100)
+        isbn = models.CharField(max_length=100)
+        pages = models.IntegerField(min_value=1)
+    
+    
+    class BookForm(ModelForm):
+        class Meta:
+            # эта форма будет работать с моделью Book
+            model = Book
+            # на странице формы будут отображаться поля 'name', 'isbn' и `pages`
+            fields = ['name', 'isbn', 'pages']
+```
+Теперь надо вывести эту форму на страницу: передать её во view-функцию или view-класс. 
+Это стандартная задача, и её тоже упростили: в Django для этого есть отдельный Generic View CreateView.
+
+```python
+from django.views.generic import CreateView
+from .forms import BookForm
+
+class BookView(CreateView):
+    form_class = BookForm
+    success_url = "/thankyou" # куда переадресовать пользователя после успешной отправки формы
+    template_name = "new_book.html"
+```
+
+В HTML-шаблон передаётся переменная form:
+
+**new_book.html:**
+```shell
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Отправить">
+</form>
+```
+**urls.py**
+```python
+#  теперь из файла urls.py для пути new_book/ 
+#  можно вызвать метод as_view() класса BookView
+#  этот метод унаследован классом BookView от родителя 
+urlpatterns = [
+    # ...
+    path("new_book/", views.BookView.as_view(), name="new_book")
+] 
+```
+
+### Добавление формы регистрации
+
+Вот план дальнейшей работы:
+1. На основе встроенного класса **UserCreationForm** напишем класс **CreationForm**, 
+   он создаст объект формы регистрации, данные из которой будут передаваться в модель **User**.
+2. На основе *Generic Views* **CreateView** создадим view-класс **SignUp**, 
+   который вызовет шаблон и передаст в него форму **CreationForm**.
+3. Создадим HTML-шаблон, он примет объект form из view-класса **CreateView**.
+4. Добавим вызов view-класса **SignUp** в *urls.py*.
+
+
+#### 1. Создание формы на основе класса UserCreationForm
+
+В модуле django/contrib/auth/forms.py для создания формы регистрации заготовлен класс 
+UserCreationForm (наследник знакомого вам встроенного класса ModelForm), на основе которого 
+создаётся форма регистрации.
+
+**django/contrib/auth/forms.py**
+
+```python
+class UserCreationForm(forms.ModelForm):
+    """
+    A form that creates a user, with no privileges, from the given username and
+    password.
+    """
+    # ... 
+```
+
+В исходном коде класса UserCreationForm видно, что форма создается на основе модели User. 
+Класс UserCreationForm (как и любые наследники класса ModelForm) считывает и добавляет 
+свойства модели как поля формы.
+
+Сейчас мы создадим класс CreationForm, наследника класса UserCreationForm. Классу ModelForm 
+он будет приходиться внуком: ModelForm → UserCreationForm → CreationForm.
+
+Класс CreationForm можно было бы и не создавать, а напрямую подключить встроенный 
+класс UserCreationForm из пакета django.contrib.auth, но для нашей работы нужно внести изменения 
+в работу предустановленного класса: хочется вывести на страницу не все поля, а лишь те, 
+которые нужны для регистрации именно на нашем сайте.
+
+> В Django принято хранить формы в отдельном файле, и мы последуем этому правилу.
+
+#### 2. Отображение формы
+
+Создайте в файле users/views.py view-класс SignUp, унаследовав его от Generic View CreateView:
+
+```python
+#  импортируем CreateView, чтобы создать ему наследника
+from django.views.generic import CreateView
+
+#  функция reverse_lazy позволяет получить URL по параметру "name" функции path()
+#  берём, тоже пригодится
+from django.urls import reverse_lazy
+
+#  импортируем класс формы, чтобы сослаться на неё во view-классе
+from .forms import CreationForm
+
+
+class SignUp(CreateView):
+    form_class = CreationForm
+    success_url = reverse_lazy("signup") #  где signup — это параметр "name" в path()
+    template_name = "signup.html"
+```
+
+ - form_class — из какого класса взять форму
+ - success_url — куда перенаправить пользователя после успешной отправки формы
+ - template_name — имя шаблона, куда будет передана переменная form с объектом HTML-формы. Всё это чем-то похоже на вызов функции render() во view-функции.
+
+Теперь в шаблон signup.html будет выведена форма, описанная в классе CreationForm. 
+После отправки этой формы пользователь будет переадресован на страницу, для которой 
+в urls.py указано имя name="signup". Данные, отправленные через форму, будут переданы 
+в модель User и сохранены в БД
+
+#### 3. Добавление шаблона
+
+Для удобства организации кода создайте директорию users/templates. Это будет директория 
+шаблонов приложения Users.
+
+Django будет работать с такими директориями, если в settings.py в директиве TEMPLATES 
+для ключа APP_DIRS установить True. После установки этого ключа Django будет искать шаблоны 
+не только в головной директории templates, но и в папках templates в директориях 
+приложений (если такие папки там есть).
+
+В users/templates создайте файл signup.html и добавьте в него код для отображения формы:
+
+```html
+{% extends "base.html" %}
+{% block title %}Зарегистрироваться{% endblock %}
+{% block content %}
+
+<form method="post" action="{% url 'signup' %}">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" value="Зарегистрироваться">
+</form>
+{% endblock %}
+```
+
+#### 4. Добавление страницы регистрации в urls.py
+
+Для адресов страниц, относящихся к регистрации и входу на сайт, мы будем использовать префикс auth/.
+Подключите файлы urls.py приложений Users и Auth к головному urls.py по аналогии с уже подключённым posts.urls.
+После изменений ваш файл yatube/urls.py должен выглядеть так:
+```python
+from django.contrib import admin
+from django.urls import include, path
+
+urlpatterns = [
+    #  регистрация и авторизация
+    path("auth/", include("users.urls")),
+
+    #  если нужного шаблона для /auth не нашлось в файле users.urls — 
+    #  ищем совпадения в файле django.contrib.auth.urls
+    path("auth/", include("django.contrib.auth.urls")),
+
+    #  раздел администратора
+    path("admin/", admin.site.urls),
+      
+    #  обработчик для главной страницы ищем в urls.py приложения posts
+    path("", include("posts.urls")),
+]
+```
+Теперь добавьте в файл users/urls.py адрес страницы регистрации пользователей:
+```python
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    # path() для страницы регистрации нового пользователя
+    # её полный адрес будет auth/signup/, но префикс auth/ обрабатывается в головном urls.py
+    path("signup/", views.SignUp.as_view(), name="signup")
+]
+```
+
+### Устройство форм в Django
+Форма в Django описывается в классе, похожем на модель. Класс должен быть унаследован от встроенного класса Form:
+
+```python
+from django import forms
+
+class ContactForm(forms.Form):
+        name = forms.CharField(label="Введите имя")
+        sender = forms.EmailField(label="Email для ответа")
+        subject = forms.CharField(label="Тема сообщения", initial='Письмо администратору', max_length=100)
+        message = forms.CharField(widget=forms.Textarea)
+        cc_myself = forms.BooleanField(label="Отправить себе копию", required=False)
+```
+Форма состоит из полей разных типов, все они описаны в [документации](https://docs.djangoproject.com/en/2.2/ref/forms/fields/#built-in-field-classes).
+Когда в шаблоне поле превращается в HTML-код, то используется виджет, определённый 
+параметром widget. Виджет — это шаблон, по которому генерируется HTML-код поля формы.
+
+Основные типы полей, которые вам будут встречаться:
+
+ - BooleanField — соответствует типу bool. Виджет по умолчанию отрисовывает чекбокс ```<input type="checkbox">```
+ - CharField — поле для ввода текста, по умолчанию используется виджет однострочного поля ввода ```<input type="text">```. 
+   Виджет можно заменить: если указать в параметрах ```widget=forms.Textarea```, 
+   будет отрисовано поле многострочного ввода, ```<textarea>```
+ - ChoiceField — поле выбора из выпадающего списка, ```<select>```
+ - EmailField — однострочное поле ввода текста, но с обязательной проверкой введённой 
+   строки на соответствие формату email
+ - FileField — поле для отправки файла, в шаблоне отрисует тег ```<input type="file">```. 
+   Есть аналогичное поле для отправки только файлов изображений: ```ImageField```
+ - IntegerField — поле для ввода чисел: ```<input type="number">```
+
+Можно самостоятельно создавать новые типы полей и новые виджеты. В Django есть 
+множество готовых виджетов, например, для превращения поля ввода в визуальный редактор.
+
+### Работа с формами из кода
+
+```python
+>>> from django import forms
+>>> class Registration(forms.Form):
+...     firstname = forms.CharField(label="Введите имя", initial='Лев')
+...     lastname = forms.CharField(label="Введите фамилию", initial='Толстой')
+... 
+>>> form = Registration()
+# напечатаем результат, чтобы увидеть HTML-код, который выведет метод as_p()
+>>> print(form.as_p())
+<p><label for="id_firstname">Введите имя:</label> <input type="text" name="firstname" value="Лев" required id="id_firstname"></p>
+<p><label for="id_lastname">Введите фамилию:</label> <input type="text" name="lastname" value="Толстой" required id="id_lastname"></p>
+```
+Каждый из этих методов можно вызывать из шаблона командами form.as_table , form.as_p или form.as_ul
+- **as_p()** -  обрамляет каждую пару тегов «label + поле» в HTML-тег ```<p>```
+- **as_table()** - форма выводится в HTML-таблицу
+- **as_ul()** - Вывод списком
+
+```python
+>>> print(form.as_table())
+<tr><th><label for="id_firstname">Введите имя:</label></th><td><input type="text" name="firstname" value="Лев" required id="id_firstname"></td></tr>
+<tr><th><label for="id_lastname">Введите фамилию:</label></th><td><input type="text" name="lastname" value="Толстой" required id="id_lastname"></td></tr>
+
+>>> print(form.as_ul())
+<li><label for="id_firstname">Введите имя:</label> <input type="text" name="firstname" value="Лев" required id="id_firstname"></li>
+<li><label for="id_lastname">Введите фамилию:</label> <input type="text" name="lastname" value="Толстой" required id="id_lastname"></li>
+```
+
+Когда форма заполнена и отправлена, Django получит данные и проверит их на корректность. 
+В случае, если отправленная информация не прошла валидацию, то объект form получит 
+список ошибок в атрибуте {{ form.errors }}
+
+### Работа с полями формы	
+
+С объектом формы можно работать через цикл for:
+```python
+>>> for field in form:
+...     print(field)
+... 
+# поля формы будут напечатаны по очереди
+<input type="text" name="firstname" value="Лев" required id="id_firstname">
+<input type="text" name="lastname" value="Толстой" required id="id_lastname">
+```
+
+
+
+
+# Шпаргалка SQL
+
+# Шпаргалка Git / GitHub
+
+## Комманды Bash 
+
+```bash
+pwd # текущая директория
+ls -laSt # список папок 
+    # -l Допинформация 
+    # -t сортировать по времени изменения
+    # -a показать скрытые 
+    # -S сортировать от больших к меньшим
+cd c:  # сменить диск директорию 
+сd /d/Project/ # сменить сразу и диск и директорию
+сd ~/Desktop # перейти на рабочий стол текущего пользователя
+cd / # Перейти в корневую директорию
+rm -r -f # Удалить папку ы
+    # -r рекурсивно удалять все вложения
+    # -f удалять без вопросов
+     
+```
+
+
+
+## Работа с Git 
+ - [Скачать Git для Windows](https://gitforwindows.org/)
+ - [Отличная шпаргалка по Git](https://githowto.com/ru/setup)
+ - [Официальный верифицированный перевод руководства по Git на русский язык](https://git-scm.com/book/ru/v2)
+ - [Ролик по Git](https://www.youtube.com/watch?v=SEvR78OhGtw&t=4215)
+ - [Тренажер по Git](https://learngitbranching.js.org/?locale=ru_RU)
+
+![картинка тренажера](https://habrastorage.org/storage2/8e7/132/076/8e7132076f76bc1c65eb1f41d15e1aa8.png)
+s
+
+### Команды Git 
+
+```bash
+###  базовые настройки Git.
+git config --global user.name "Aleksandr Evstushkin"
+git config --global user.email "evstushkin@gmail.com" 
+### Клонирование себе репозитория с GitHub
+git clone https://github.com/ваш-аккаунт-на-гитхабе/backend_test_homework
+
+###
+git add  название_файла # добавить новые файлы в индекс
+git add .  # или (git add --all) добавить все неотслеживаемые файлы в индекс 
+git commit -m  'New edit' # сохранить версию проекта с комментарием
+git commit --amend -m "Текст вашего комментария" # Обновить последний commit и комментарий
+git push # Отправить данные на сервер
+
+### просмотр данных о коммитах
+git status # Проверка статуса файлов 
+git log # Информация о коммитах [Q] для выхода из просмотра  
+git show # Подробная информация об изменениях 
+git show HEAD # Подробная информация об изменениях в самом свежем коммите 
+git show 1234567 # где вместо 1234567 нужно указать первые 7 символов контрольной суммы нужного коммита
+
+### Сброс изменений
+git reset 97a25f7 ### Сброс изменений и возврат всего проекта к определенному коммиту 
+git reset HEAD program.py # откатиться на один коммит назад в определённом файле
+git reset HEAD  # Сброс всего проекта до последнего коммита
+
+
+```
+Для игнорироания файлов Git-ом добавить файл .gitignore: 
+```properties
+# Пример файла (Комментарии поддерживаются):
+README.md       # игнорировать файл README.md
+build/side.txt  # игнорировать файл side.txt в директории build
+*.doc           # игнорировать все файлы с расширением .doc
+``` 
+
+### Работа с GitHub  
+
+ - Для копирования себе чужого репозитория нажать FORK. После этого он будет доступен по адресу https://github.com/ваш-аккаунт-на-гитхабе/backend_test_homework  
+
+
+
+# Прочее 
+
+## Оформление кода PEP8 
+
+[Стандарт оформления кода PEP8](https://www.python.org/dev/peps/pep-0008/)
+
+### Основные правила PEP8:
+ - Длина строки — не более 79 символов.
+ - Отступы — 4 пробела.
+ - Стили имён должны соответствовать PEP8: Naming Conventions.
+ - Переносы строк делаются с правильными отступами.
+ - Бэкслеши \ для переносов не применяются.
+ - В коде нет неиспользуемых импортов.
+ - Импорты отсортированы в таком порядке:
+    - импорты стандартной библиотеки,
+    - импорты сторонних библиотек,
+    - импорты модулей текущего проекта.
+ - Функции верхнего уровня (не вложенные) и определения классов отделены друг от друга двумя пустыми строчками.
+ - Определения методов внутри класса отделены одной пустой строкой.
+ - Консистентность (одинаковые кавычки, одинаковые методы решения одинаковых проблем и так далее).
+ - Отсутствие закомментированного кода и стандартных комментариев Django ( # Create your views here. etc.)
+ - Комментарии к функциям оформлены в виде Docstrings, в соответствии с Docstring Conventions: начинаются с большой 
+   буквы, заканчиваются точкой и содержат описание того, что делает функция. 
+ -  Комментарии к коду лаконичны и содержательны.
+ - Длинные куски кода логически разделены пустыми строками, как абзацы в тексте.
+ - Отсутствуют лишние операции.
+ - Нет лишних else там, где они не нужны (если в if происходит return / raise ); используется Guard Block.
+ - В репозитории нет лишних файлов: никаких __pycache__ , .vscode и
+прочего
+ - Исполняемый код в .py-файлах должен быть закрыт конструкцией if__name__ == ‘__main__’
+ - Для неизменяемых последовательностей данных предпочтительнее применяются кортежи, а не списки.
+ - В f-строках применяется только подстановка переменных и нет логических или арифметических операций, вызовов функций и 
+   подобной динамики.
+ - Переменные названы в соответствии с их смыслом, по-английски, нет однобуквенных названий и транслита. В названии 
+   переменной не должен содержаться её тип.
+ - При необходимости применяются type annotations.
+
+### Про HTML шаблоны:
+ - {{ переменные }} и % теги % в шаблонах отформатированы согласно ощепринятым рекомендациям.
+ - HTMLтеги в шаблонах отбиты отступами в соответствии со вложенностью. Размер отступа — 2 или 4 пробела, постоянный в
+пределах проекта.
+ - В приложениях указаны правильные пути к шаблонам
+    - Допустимый путь: app/templates/app/index.html .
+    - Недопустимый путь: app/templates/index.html .
+    - Возможен вариант с project level templates: общая директория templates в корне проекта со всеми шаблонами внутри.
+
+### Про Django в целом:
+      
+ - В urls.py в конце роутов стоит слеш /
+ - Для URL применяются соответствующие Path converters.
+ - Соблюдается официальный [код-стайл Django](https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/)
+
+
+## Шпаргалка Markdown
+
+ - [Краткая справка Markdown](https://paulradzkov.com/2014/markdown_cheatsheet/)
+ - [PlantUML для рисования схем в двух словах](https://plantuml.com/ru/)
+
+Пример диаграммы PlantUML из текста
+```puml
+start
+:Вывалить мысли в текст;
+if (Бред?) then (Возможно)
+    :Дать посмотреть коллеге;
+    if (Сойдет?) then (Да)
+    else (Нет)
+        :Помедитировать над текстом;
+    endif
+    :Разместить в проекте;
+else (Точно)
+    stop
+endif
+stop
+```
+
+## Сервисы для самообучения:
+
+[Freecodecsmp](https://www.freecodecamp.org/) 
+
+### Путевая карта Backend разработчика
+
+![Путевая карта Backend разработчика](https://roadmap.sh/roadmaps/backend.png)
