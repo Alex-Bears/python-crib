@@ -946,7 +946,13 @@ https://habr.com/ru/post/483400/
 
 # Алгоритмы
 
+## Генераторы списков
 
+https://pyprog.pro/python/py/list/list_generat.html
+
+## Генераторы словарей
+
+https://pyprog.pro/python/py/dict/dict_generators.html
 
 ## Однопроходные алгоритмы
 
@@ -6101,6 +6107,7 @@ if settings.DEBUG:
 
 ### ngrok
 
+Доступ к проекту в локальной сети 
 [Документация](https://ngrok.com/download)
 
 ```BASH 
@@ -6119,7 +6126,9 @@ $ ngrok http 8000
 ```
 У вас появится окно, в нём через пару секунд вы увидите доменное имя вашего сайта
 
+### Простые HTML шаблоны сайтов 
 
+https://html5up.net/
 
 -------------------------------------------------------------------------------
 # API 
